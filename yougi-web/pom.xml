@@ -85,24 +85,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <tasks>
-                                <copy file="${basedir}/src/main/resources/org/cejug/yougi/db/changelog_${environment}.xml" toFile="${project.build.directory}/webapp/WEB-INF/classes/org/cejug/yougi/db/changelog.xml"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- resource optimization -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
