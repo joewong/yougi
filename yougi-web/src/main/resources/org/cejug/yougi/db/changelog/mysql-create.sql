@@ -1,38 +1,6 @@
 --liquibase formatted sql
 
 --changeset htmfilho:1
-drop table if exists event_venue;
-drop table if exists venue;
-drop table if exists speaker;
-drop table if exists event_session;
-drop table if exists attendee;
-drop table if exists event_sponsor;
-drop table if exists event;
-
-drop table if exists representative;
-drop table if exists partner;
-
-drop table if exists article;
-drop table if exists web_source;
-drop table if exists mailing_list_message;
-drop table if exists topic;
-drop table if exists mailing_list_subscription;
-drop table if exists mailing_list;
-
-drop table if exists user_group;
-drop table if exists access_group;
-drop table if exists authentication;
-
-drop table if exists historical_message;
-drop table if exists user_account;
-drop table if exists city;
-drop table if exists province;
-drop table if exists country;
-drop table if exists language;
-drop table if exists message_template;
-drop table if exists application_property;
-
---changeset htmfilho:2
 create table application_property (
     property_key   varchar(100) not null,
     property_value text             null

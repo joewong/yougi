@@ -27,30 +27,33 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Due to the user-unfriendly Java Timezone implementation, this class was
- * created to represent friendly timezones to end-users.
+ * Due to the user-unfriendly Java TimeZone implementation, this class was
+ * created to represent friendly time zones to end-users. User friendly time zones
+ * are stored in the database for immediate changes in case of public time zone
+ * changes.
  *
  * @author Hildeberto Mendonca - http://www.hildeberto.com
  */
 @Entity
 public class Timezone implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final Integer INTERVAL_RAW_OFFSET = 3600000;
+    private static final Integer MINUTE_SCALE = 60000;
 
     @Id
     private String id;
 
-    private String sign;
-
-    @Column(name = "offset_hour")
-    private Integer offsetHour;
-
-    @Column(name = "offset_minute")
-    private Integer offsetMinute;
+    @Column(name = "raw_offset")
+    private Integer rawOffset;
 
     private String label;
 
     @Column(name = "default_tz")
     private Boolean defaultTz;
+
+    public Timezone() {
+        this.rawOffset = 0;
+    }
 
     public String getId() {
         return id;
@@ -60,36 +63,104 @@ public class Timezone implements Serializable {
         this.id = id;
     }
 
+    public String getOffset() {
+        StringBuilder sb = new StringBuilder();
+        Integer absRawOffset = Math.abs(this.rawOffset);
+
+        if(this.rawOffset >= 0) {
+            sb.append("+");
+        }
+        else {
+            sb.append("-");
+        }
+
+        sb.append(String.format("%02d", absRawOffset / INTERVAL_RAW_OFFSET));
+
+        sb.append(":");
+
+        if((this.rawOffset % INTERVAL_RAW_OFFSET) != 0) {
+            sb.append(String.format("%02d", (absRawOffset - ((absRawOffset / INTERVAL_RAW_OFFSET) * INTERVAL_RAW_OFFSET)) / MINUTE_SCALE));
+        }
+        else {
+            sb.append("00");
+        }
+
+        return sb.toString();
+    }
+
     public String getSign() {
+        String sign;
+        if(this.rawOffset >= 0) {
+            sign = "+";
+        }
+        else {
+            sign = "-";
+        }
         return sign;
     }
 
     public void setSign(String sign) {
-        this.sign = sign;
+        switch(sign) {
+            case "+":
+                if(this.rawOffset < 0) {
+                    this.rawOffset *= -1;
+                }
+                break;
+            case "-":
+                if(this.rawOffset >= 0) {
+                    this.rawOffset *= -1;
+                }
+                break;
+        }
     }
 
     public Integer getOffsetHour() {
-        return offsetHour;
+        Integer absRawOffset = Math.abs(this.rawOffset);
+        return absRawOffset / INTERVAL_RAW_OFFSET;
     }
 
     public void setOffsetHour(Integer offsetHour) {
-        this.offsetHour = offsetHour;
+        Integer rest = 0;
+        if((this.rawOffset % INTERVAL_RAW_OFFSET) != 0) {
+            Integer absRawOffset = Math.abs(this.rawOffset);
+            rest = absRawOffset - ((absRawOffset / INTERVAL_RAW_OFFSET) * INTERVAL_RAW_OFFSET);
+        }
+
+        Integer newRawOffset = (offsetHour * INTERVAL_RAW_OFFSET) + rest;
+
+        if(this.rawOffset >= 0) {
+            this.rawOffset = newRawOffset;
+        }
+        else {
+            this.rawOffset = newRawOffset * -1;
+        }
     }
 
     public Integer getOffsetMinute() {
-        return offsetMinute;
+        Integer absRawOffset = Math.abs(this.rawOffset);
+        Integer minutes = 0;
+        if((this.rawOffset % INTERVAL_RAW_OFFSET) != 0) {
+            minutes = (absRawOffset - ((absRawOffset / INTERVAL_RAW_OFFSET) * INTERVAL_RAW_OFFSET)) / MINUTE_SCALE;
+        }
+        return minutes;
     }
 
     public void setOffsetMinute(Integer offsetMinute) {
-        this.offsetMinute = offsetMinute;
-    }
-
-    public String getOffset() {
-        return sign + String.format("%02d", this.offsetHour) + ":" + String.format("%02d", this.offsetMinute);
+        Integer offsetHour = getOffsetHour();
+        if(this.rawOffset >= 0) {
+            this.rawOffset = (offsetHour * INTERVAL_RAW_OFFSET) + (offsetMinute * MINUTE_SCALE);
+        }
+        else {
+            this.rawOffset = ((offsetHour * INTERVAL_RAW_OFFSET) + (offsetMinute * MINUTE_SCALE)) * -1;
+        }
     }
 
     public String getLabel() {
         return label;
+    }
+
+    public String getOffsetLabel() {
+        return "("+ getOffset() +") "+ this.label;
     }
 
     public void setLabel(String label) {
@@ -129,6 +200,6 @@ public class Timezone implements Serializable {
 
     @Override
     public String toString() {
-        return this.label;
+        return "("+ getOffset() +") "+ this.label;
     }
 }

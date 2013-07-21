@@ -28,9 +28,7 @@ import javax.persistence.PersistenceContext;
 import org.cejug.yougi.entity.Timezone;
 
 /**
- * Manages data of countries, states or provinces and cities because these
- * three entities are strongly related and because they are too simple to
- * have an exclusive business class.
+ * Manages user-friendly time zones.
  *
  * @author Hildeberto Mendonca - http://www.hildeberto.com
  */
@@ -55,11 +53,18 @@ public class TimezoneBean {
     }
 
     public List<Timezone> findTimezones() {
-        return em.createQuery("select tz from Timezone tz order by tz.sign, tz.offsetHour, tz.offsetMinute asc", Timezone.class)
+        return em.createQuery("select tz from Timezone tz order by tz.rawOffset asc", Timezone.class)
                  .getResultList();
     }
 
     public void save(Timezone timezone) {
+        if(timezone.getDefaultTz()) {
+            Timezone defaultTimezone = findDefaultTimezone();
+            if(!timezone.equals(defaultTimezone)) {
+                defaultTimezone.setDefaultTz(Boolean.FALSE);
+            }
+        }
+
         Timezone existingTimezone = em.find(Timezone.class, timezone.getId());
         if(existingTimezone == null) {
             em.persist(timezone);

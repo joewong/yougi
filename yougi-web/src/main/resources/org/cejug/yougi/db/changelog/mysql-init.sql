@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset htmfilho:3
+--changeset htmfilho:2
 insert into application_property values ('timezone', 'UTC 0:00'),
                                         ('url', 'http://localhost:8080/ug'),
                                         ('sendEmails', 'false'),

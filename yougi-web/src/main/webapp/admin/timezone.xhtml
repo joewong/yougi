@@ -64,7 +64,9 @@
                                 </h:selectOneMenu>
                                 <h:selectOneMenu id="offsetMinute" label="#{bundle.minute}" value="#{timezoneMBean.timezone.offsetMinute}" required="true">
                                     <f:selectItem itemLabel="00" itemValue="0" />
+                                    <f:selectItem itemLabel="15" itemValue="15"/>
                                     <f:selectItem itemLabel="30" itemValue="30"/>
+                                    <f:selectItem itemLabel="45" itemValue="45"/>
                                 </h:selectOneMenu>
                                 <h:message for="sign" errorClass="errorMessage"/>
                                 <h:message for="offsetHour" errorClass="errorMessage"/>
@@ -83,7 +85,9 @@
                             </h:panelGroup>
                         </h:panelGrid>
                         <h:panelGrid columns="3">
-                            <h:commandButton value="#{bundle.save}" action="#{timezoneMBean.save}"/>
+                            <h:commandButton value="#{bundle.save}" action="#{timezoneMBean.save}">
+                                <f:param name="timezone" value="#{timezoneMBean.timezone.id}"/>
+                            </h:commandButton>
                             <h:commandButton value="#{bundle.remove}" action="#{timezoneMBean.remove}" rendered="#{timezoneMBean.existent}" onclick="return confirmAction('#{bundle.warnCode0005}');">
                                 <f:param name="timezone" value="#{timezoneMBean.timezone.id}"/>
                             </h:commandButton>
