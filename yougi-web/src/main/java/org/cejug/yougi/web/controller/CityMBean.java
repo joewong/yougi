@@ -61,9 +61,8 @@ public class CityMBean implements Serializable {
 
     private City city;
 
+    private List<City> cities;
     private List<Timezone> timezones;
-
-    private String selectedTimezone;
 
     public CityMBean() {
         this.city = new City();
@@ -93,16 +92,11 @@ public class CityMBean implements Serializable {
         this.city = city;
     }
 
-    public String getSelectedTimezone() {
-        return selectedTimezone;
-    }
-
-    public void setSelectedTimezone(String selectedTimezone) {
-        this.selectedTimezone = selectedTimezone;
-    }
-
     public List<City> getCities() {
-        return locationBean.findCities();
+        if(this.cities == null) {
+            this.cities = locationBean.findCities();
+        }
+        return this.cities;
     }
 
     public List<UserAccount> getInhabitants() {

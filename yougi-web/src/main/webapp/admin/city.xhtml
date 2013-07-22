@@ -74,10 +74,9 @@
                                             <br/><h:message for="longitude" errorClass="errorMessage"/>
                                         </h:panelGroup>
                                         <h:panelGroup>
-                                            <h:outputLabel for="timezone" value="#{bundle.timeZone}" styleClass="fieldLabel"/>
-                                            <h:selectOneMenu id="timezone" label="#{bundle.timeZone}" value="#{cityMBean.selectedTimezone}">
+                                            <h:selectOneMenu id="timezone" label="#{bundle.timeZone}" value="#{cityMBean.city.timeZone}">
                                                 <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                                <f:selectItems value="#{cityMBean.timezones}" var="tz" itemLabel="#{tz.label}" itemValue="#{tz.id}"/>
+                                                <f:selectItems value="#{cityMBean.timezones}" var="tz" itemLabel="#{tz.offsetLabel}" itemValue="#{tz.id}"/>
                                             </h:selectOneMenu>
                                             <br/><h:message for="timeZone" errorClass="errorMessage"/>
                                         </h:panelGroup>

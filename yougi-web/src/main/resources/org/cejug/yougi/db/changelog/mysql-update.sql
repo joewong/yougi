@@ -311,3 +311,34 @@ insert into timezone (id, raw_offset, label, default_tz)
            ('Kwajalein',            +43200000, 'Marshall Is.',                 false),
            ('Pacific/Apia',         +46800000, 'Samoa',                        false),
            ('Pacific/Kiritimati',   +50400000, 'Kiritimati',                   false);
+
+--changeset htmfilho:10
+alter table city change timezone varchar(50) null;
+update city set timezone = 'Etc/Greenwich'       where timezone = 'UTC';
+update city set timezone = 'Etc/GMT+12'          where timezone = 'UTC -12:00';
+update city set timezone = 'Etc/GMT+11'          where timezone = 'UTC -11:00';
+update city set timezone = 'Pacific/Honolulu'    where timezone = 'UTC -10:00';
+update city set timezone = 'US/Alaska'           where timezone = 'UTC -9:00';
+update city set timezone = 'America/Tijuana'     where timezone = 'UTC -8:00';
+update city set timezone = 'America/Chihuahua'   where timezone = 'UTC -7:00';
+update city set timezone = 'America/Mexico_City' where timezone = 'UTC -6:00';
+update city set timezone = 'America/Bogota'      where timezone = 'UTC -5:00';
+update city set timezone = 'America/Santiago'    where timezone = 'UTC -4:00';
+update city set timezone = 'America/Fortaleza'   where timezone = 'UTC -3:00';
+update city set timezone = 'America/Noronha'     where timezone = 'UTC -2:00';
+update city set timezone = 'Atlantic/Azores'     where timezone = 'UTC -1:00';
+update city set timezone = 'Etc/Greenwich'       where timezone = 'UTC +0:00';
+update city set timezone = 'Europe/Brussels'     where timezone = 'UTC +1:00';
+update city set timezone = 'Europe/Athens'       where timezone = 'UTC +2:00';
+update city set timezone = 'Asia/Baghdad'        where timezone = 'UTC +3:00';
+update city set timezone = 'Asia/Dubai'          where timezone = 'UTC +4:00';
+update city set timezone = 'Asia/Karachi'        where timezone = 'UTC +5:00';
+update city set timezone = 'Asia/Dhaka'          where timezone = 'UTC +6:00';
+update city set timezone = 'Asia/Jakarta'        where timezone = 'UTC +7:00';
+update city set timezone = 'Asia/Hong_Kong'      where timezone = 'UTC +8:00';
+update city set timezone = 'Asia/Tokyo'          where timezone = 'UTC +9:00';
+update city set timezone = 'Australia/Melbourne' where timezone = 'UTC +10:00';
+update city set timezone = 'Asia/Magadan'        where timezone = 'UTC +11:00';
+update city set timezone = 'Asia/Kamchatka'      where timezone = 'UTC +12:00';
+update city set timezone = 'Pacific/Apia'        where timezone = 'UTC +13:00';
+update city set timezone = 'Pacific/Kiritimati'  where timezone = 'UTC +14:00';
