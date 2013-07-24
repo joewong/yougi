@@ -51,9 +51,8 @@ public class VenueBean {
     }
 
     public List<Venue> findVenues() {
-    	List<Venue> venues = em.createQuery("select v from Venue v order by v.name asc")
-        		       .getResultList();
-        return venues;
+    	return em.createQuery("select v from Venue v order by v.name asc")
+                 .getResultList();
     }
 
     public List<Venue> findEventVenues(Event event) {

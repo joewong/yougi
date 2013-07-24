@@ -75,10 +75,6 @@ public class SpeakerMBean implements Serializable {
 
     private List<Speaker> speakers;
 
-    private String selectedEvent;
-
-    private String selectedEventSession;
-
     private String selectedUserAccount;
 
     public SpeakerMBean() {
@@ -122,28 +118,6 @@ public class SpeakerMBean implements Serializable {
             this.speakers = speakerBean.findSpeakers(this.event);
         }
         return this.speakers;
-    }
-
-    public String getSelectedEvent() {
-        return this.selectedEvent;
-    }
-
-    public void setSelectedEvent(String selectedEvent) {
-        this.selectedEvent = selectedEvent;
-    }
-
-    /**
-     * @return the selectedEventSession
-     */
-    public String getSelectedEventSession() {
-        return selectedEventSession;
-    }
-
-    /**
-     * @param selectedEventSession the selectedEventSession to set
-     */
-    public void setSelectedEventSession(String selectedEventSession) {
-        this.selectedEventSession = selectedEventSession;
     }
 
     /**
@@ -200,32 +174,33 @@ public class SpeakerMBean implements Serializable {
 
     @PostConstruct
     public void load() {
-        if (this.eventId != null && !this.eventId.isEmpty()) {
-            this.event = eventBean.findEvent(eventId);
-            this.selectedEvent = this.event.getId();
-        }
-
         if (this.id != null && !this.id.isEmpty()) {
             this.speaker = speakerBean.findSpeaker(id);
             this.selectedUserAccount = this.speaker.getUserAccount().getId();
         }
 
-        this.events = eventBean.findParentEvents();
         this.userAccounts = userAccountBean.findUserAccounts();
     }
 
     public String save() {
-        Event evt = eventBean.findEvent(selectedEvent);
-
         UserAccount usrAcc = userAccountBean.findUserAccount(selectedUserAccount);
         this.speaker.setUserAccount(usrAcc);
 
         speakerBean.save(this.speaker);
-        return "speakers?faces-redirect=true&eventId=" + evt.getId();
+        return getNextPage();
     }
 
     public String remove() {
         speakerBean.remove(this.speaker.getId());
-        return "speakers?faces-redirect=true&eventId=" + this.event.getId();
+        return getNextPage();
+    }
+    
+    private String getNextPage() {
+        if (this.eventId != null && !this.eventId.isEmpty()) {
+            return "event?faces-redirect=true&tab=3&id="+ this.eventId;
+        }
+        else {
+            return "speakers?faces-redirect=true&eventId="+ this.eventId;
+        }
     }
 }

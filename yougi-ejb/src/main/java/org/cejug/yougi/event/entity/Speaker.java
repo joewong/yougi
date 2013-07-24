@@ -27,7 +27,7 @@ import org.cejug.yougi.entity.UserAccount;
 
 /**
  * Person with knowledge and experience to give a speech in an event, respecting
- * the scope of subjects in the domain explored by the user group.
+ * the scope of subjects in the domain explored by the user group event.
  *
  * @author Hildeberto Mendonca - http://www.hildeberto.com
  */
@@ -69,7 +69,10 @@ public class Speaker implements Serializable, Identified {
     }
     
     public String getFullName() {
-        return this.userAccount.getFullName();
+        if(this.userAccount != null) {
+            return this.userAccount.getFullName();
+        }
+        return null;
     }
 
     public UserAccount getUserAccount() {
@@ -136,6 +139,6 @@ public class Speaker implements Serializable, Identified {
 
     @Override
     public String toString() {
-        return this.userAccount.getFullName();
+        return this.getFullName();
     }
 }

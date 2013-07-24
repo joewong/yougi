@@ -37,6 +37,7 @@
                             <h:selectOneMenu id="event" label="#{bundle.event}" value="#{eventVenueMBean.selectedEvent}">
                                 <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
                                 <f:selectItems value="#{eventVenueMBean.events}" var="event" itemLabel="#{event.name}" itemValue="#{event.id}"/>
+                                <f:ajax render="venue"/>
                             </h:selectOneMenu>
                             <h:message for="event" errorClass="errorMessage"/>
 
@@ -49,10 +50,12 @@
                         </h:panelGrid>
 
                         <h:panelGrid columns="2">
-                            <h:commandButton value="#{bundle.save}" action="#{eventVenueMBean.save}"/>
-                            <h:button value="#{bundle.cancel}" outcome="venue">
-                                <f:param name="id" value="#{roomMBean.selectedVenue}"/>
-                            </h:button>
+                            <h:commandButton value="#{bundle.save}" action="#{eventVenueMBean.save}">
+                                <f:param name="eventId" value="#{eventVenueMBean.eventId}"/>
+                            </h:commandButton>
+                            <h:commandButton value="#{bundle.cancel}" action="#{eventVenueMBean.cancel}">
+                                <f:param name="eventId" value="#{eventVenueMBean.eventId}"/>
+                            </h:commandButton>
                         </h:panelGrid>
                     </h:form>
                 </div>
