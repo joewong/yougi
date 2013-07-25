@@ -312,8 +312,8 @@ insert into timezone (id, raw_offset, label, default_tz)
            ('Pacific/Apia',         +46800000, 'Samoa',                        false),
            ('Pacific/Kiritimati',   +50400000, 'Kiritimati',                   false);
 
---changeset htmfilho:10
-alter table city change timezone varchar(50) null;
+alter table city modify timezone varchar(50) null;
+
 update city set timezone = 'Etc/Greenwich'       where timezone = 'UTC';
 update city set timezone = 'Etc/GMT+12'          where timezone = 'UTC -12:00';
 update city set timezone = 'Etc/GMT+11'          where timezone = 'UTC -11:00';
