@@ -28,9 +28,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import org.cejug.yougi.event.business.EventBean;
+import org.cejug.yougi.event.business.EventVenueBean;
+import org.cejug.yougi.event.business.RoomBean;
 import org.cejug.yougi.event.business.SessionBean;
+import org.cejug.yougi.event.business.TrackBean;
 import org.cejug.yougi.event.entity.Event;
+import org.cejug.yougi.event.entity.Room;
 import org.cejug.yougi.event.entity.Session;
+import org.cejug.yougi.event.entity.Track;
+import org.cejug.yougi.event.entity.Venue;
 
 /**
  * @author Hildeberto Mendonca - http://www.hildeberto.com
@@ -46,6 +52,15 @@ public class SessionMBean implements Serializable {
 
     @EJB
     private EventBean eventBean;
+    
+    @EJB
+    private EventVenueBean eventVenueBean;
+    
+    @EJB
+    private RoomBean roomBean;
+    
+    @EJB
+    private TrackBean trackBean;
 
     @ManagedProperty(value = "#{param.id}")
     private String id;
@@ -54,20 +69,21 @@ public class SessionMBean implements Serializable {
     private String eventId;
 
     private Event event;
-
     private Session session;
 
     private List<Event> events;
-
     private List<Session> sessions;
-
     private List<Session> relatedSessions;
-
     private List<Session> sessionsInTheSameRoom;
-
     private List<Session> sessionsInParallel;
+    private List<Venue> venues;
+    private List<Room> rooms;
+    private List<Track> tracks;
 
     private String selectedEvent;
+    private String selectedVenue;
+    private String selectedRoom;
+    private String selectedTrack;
 
     public SessionMBean() {
     }
@@ -131,6 +147,28 @@ public class SessionMBean implements Serializable {
         }
         return sessionsInParallel;
     }
+    
+    public List<Venue> getVenues() {
+        if(this.venues == null) {
+            this.venues = eventVenueBean.findEventVenues(this.event);
+        }
+        return this.venues;
+    }
+    
+    public List<Room> getRooms() {
+        if(this.rooms == null) {
+            Venue venue = new Venue(selectedVenue);
+            this.rooms = roomBean.findRooms(venue);
+        }
+        return this.rooms;
+    }
+    
+    public List<Track> getTracks() {
+        if(this.tracks == null) {
+            this.tracks = trackBean.findTracks(this.event);
+        }
+        return this.tracks;
+    }
 
     public String getSelectedEvent() {
         return this.selectedEvent;
@@ -138,6 +176,30 @@ public class SessionMBean implements Serializable {
 
     public void setSelectedEvent(String selectedEvent) {
         this.selectedEvent = selectedEvent;
+    }
+    
+    public String getSelectedVenue() {
+        return this.selectedVenue;
+    }
+
+    public void setSelectedVenue(String selectedVenue) {
+        this.selectedVenue = selectedVenue;
+    }
+    
+    public String getSelectedRoom() {
+        return this.selectedRoom;
+    }
+
+    public void setSelectedRoom(String selectedRoom) {
+        this.selectedRoom = selectedRoom;
+    }
+    
+    public String getSelectedTrack() {
+        return this.selectedTrack;
+    }
+
+    public void setSelectedTrack(String selectedTrack) {
+        this.selectedTrack = selectedTrack;
     }
 
     public List<Event> getEvents() {

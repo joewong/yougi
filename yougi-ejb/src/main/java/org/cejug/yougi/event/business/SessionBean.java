@@ -222,8 +222,6 @@ public class SessionBean {
         return new ArrayList<>(relatedSessions);
     }
 
-
-
     public void save(Session session) {
         if (EntitySupport.INSTANCE.isIdNotValid(session)) {
             session.setId(EntitySupport.INSTANCE.generateEntityId());

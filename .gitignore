@@ -47,3 +47,4 @@ nbactions.xml
 /yougi-ejb/yougi-ejb.iml
 /yougi-web/yougi-web.iml
 /.project
+yougi-ear/nb-configuration.xml
