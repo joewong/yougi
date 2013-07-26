@@ -55,15 +55,11 @@
                             <h:outputLabel for="emailConfirmation" value="#{bundle.confirmEmail} *" styleClass="fieldLabel"/>
 
                             <h:panelGroup>
-                                <h:inputText id="email" label="#{bundle.email}" required="true" size="40" maxlength="100" value="#{userAccountMBean.userAccount.unverifiedEmail}" onchange="formatEmail(this);" validator="#{userAccountMBean.validateEmail}">
-                                    <f:validateRegex pattern="#{bundle.emailPattern}"/>
-                                </h:inputText>
+                                <h:inputText id="email" label="#{bundle.email}" required="true" size="40" maxlength="100" value="#{userAccountMBean.userAccount.unverifiedEmail}" onchange="formatEmail(this);" validator="#{userAccountMBean.validateEmail}"/>
                                 <h:message for="email" errorClass="errorMessage"/>
                             </h:panelGroup>
                             <h:panelGroup>
-                                <h:inputText id="mailConfirmation" label="#{bundle.confirmEmail}" required="true" size="40" maxlength="100" value="#{userAccountMBean.userAccount.emailConfirmation}" onchange="formatEmail(this);" validator="#{userAccountMBean.validateEmailConfirmation}">
-                                    <f:validateRegex pattern="#{bundle.emailPattern}"/>
-                                </h:inputText>
+                                <h:inputText id="mailConfirmation" label="#{bundle.confirmEmail}" required="true" size="40" maxlength="100" value="#{userAccountMBean.userAccount.emailConfirmation}" onchange="formatEmail(this);" validator="#{userAccountMBean.validateEmailConfirmation}"/>
                                 <h:message for="mailConfirmation" errorClass="errorMessage"/>
                             </h:panelGroup>
 

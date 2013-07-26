@@ -154,6 +154,18 @@ public class SessionBean {
         }
         return sessions;
     }
+        
+    public List<Session> findSessionsSpeaker(Speaker speaker) {
+        return em.createQuery("select ss.session from SpeakerSession ss where ss.speaker = :speaker")
+                 .setParameter("speaker", speaker)
+                 .getResultList();
+    }
+            
+    public List<Event> findEventsSpeaker(Speaker speaker) {
+        return em.createQuery("select ss.session.event from SpeakerSession ss where ss.speaker = :speaker")
+                 .setParameter("speaker", speaker)
+                 .getResultList();
+    }
     
     public List<Speaker> findSessionSpeakersByRoom(Event event, Room room) {
         List<Session> sessions = findSessionsByRoom(event, room);

@@ -212,11 +212,6 @@
                             </p:tab>
 
                             <p:tab title="#{bundle.speakers}">
-                                <h:button value="#{bundle.newSpeaker}" outcome="speaker_form" rendered="#{securityBackingMBean.isUserLeader}">
-                                    <f:param name="eventId" value="#{eventMBean.event.id}"/>
-                                </h:button>
-                                <p/>
-                                
                                 <h:panelGrid>
                                     <c:forEach var="spk" items="#{eventMBean.speakers}">
                                         <h:panelGroup>
