@@ -23,6 +23,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <body>
         <ui:composition template="../layout.xhtml">
@@ -31,49 +32,39 @@
                 <div class="content">
                     <h1>#{bundle.sponsor}</h1>
                     <h:form>
-                        <h:messages globalOnly="true" styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/>
-                        <h:panelGrid>
-                            <h:outputLabel for="event" value="#{bundle.event} *" styleClass="fieldLabel"/>
-                            <h:selectOneMenu id="event" label="#{bundle.event}" value="#{sponsorshipEventMBean.selectedEvent}" required="true">
-                                <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                <f:selectItems value="#{sponsorshipEventMBean.events}" var="event" itemLabel="#{event.name}" itemValue="#{event.id}"/>
-                            </h:selectOneMenu>
-                            <h:message for="event" errorClass="errorMessage"/>
-
-                            <h:outputLabel for="sponsor" value="#{bundle.sponsor}" styleClass="fieldLabel"/>
-                            <h:selectOneMenu id="sponsor" label="#{bundle.sponsor}" value="#{sponsorshipEventMBean.selectedSponsorship}">
-                                <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                <f:selectItems value="#{sponsorshipEventMBean.partners}" var="partner" itemLabel="#{partner.name}" itemValue="#{partner.id}"/>
-                            </h:selectOneMenu>
-                            <h:message for="sponsor" errorClass="errorMessage"/>
-
-                            <h:outputLabel for="amount" value="#{bundle.amount}" styleClass="fieldLabel"/>
+                        <h:panelGrid columns="2" width="100%" columnClasses="alignColumnLeft, alignColumnRight">
+                            <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.partner}" style="font-size: 26px; font-weight: bold;"/>
                             <h:panelGroup>
-                                <h:inputText id="amount" label="#{bundle.amount}" size="10" maxlength="13" value="#{sponsorshipEventMBean.sponsorshipEvent.amount}">
-	                            <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
-	                        </h:inputText>
-	                        <h:outputText value="#{bundle.currencyFormat}" styleClass="fieldFormat"/>
+                                <p:button value="#{bundle.edit}" outcome="sponsor_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                    <f:param name="id" value="#{sponsorshipEventMBean.sponsorshipEvent.id}"/>
+                                    <f:param name="eventId" value="#{param.eventId}"/>
+                                </p:button>
+                                <p:button value="#{bundle.back}" outcome="event">
+                                    <f:param name="id" value="#{param.eventId}"/>
+                                    <f:param name="tab" value="6"/>
+                                </p:button>
                             </h:panelGroup>
-                            <h:message for="amount" errorClass="errorMessage"/>
-
-                            <h:outputLabel for="description" value="#{bundle.description}" styleClass="fieldLabel"/>
-                            <h:inputTextarea id="description" label="#{bundle.description}" required="false" cols="60" rows="4" value="#{sponsorshipEventMBean.sponsorshipEvent.description}"/>
                         </h:panelGrid>
 
-                        <h:inputHidden id="id" value="#{sponsorshipEventMBean.sponsorshipEvent.id}"/>
+                        <h:panelGrid width="100%">
+                            <h:link outcome="event" value="#{sponsorshipEventMBean.sponsorshipEvent.event}" style="font-size: 18px;">
+                                <f:param name="id" value="#{sponsorshipEventMBean.sponsorshipEvent.event.id}"/>
+                            </h:link>
 
-                        <h:panelGrid columns="3">
-                            <h:commandButton value="#{bundle.save}" action="#{sponsorshipEventMBean.save}">
-                                <f:param name="eventId" value="#{sponsorshipEventMBean.sponsorshipEvent.event.id}"/>
-                                <f:param name="id" value="#{sponsorshipEventMBean.sponsorshipEvent.id}"/>
-                            </h:commandButton>
-                            <h:commandButton value="#{bundle.remove}" action="#{sponsorshipEventMBean.remove}" rendered="#{! empty sponsorshipEventMBean.id}">
-                                <f:param name="eventId" value="#{sponsorshipEventMBean.sponsorshipEvent.event.id}"/>
-                                <f:param name="id" value="#{sponsorshipEventMBean.sponsorshipEvent.id}"/>
-                            </h:commandButton>
-                            <h:button value="#{bundle.cancel}" outcome="sponsors">
-                                <f:param name="eventId" value="#{sponsorshipEventMBean.sponsorshipEvent.event.id}"/>
-                            </h:button>
+                            <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.sponsorshipLevel}" style="font-size: 14px;"/>
+
+                            <p:spacer height="10"/>
+
+                            <h:panelGroup rendered="#{securityBackingMBean.isUserLeader}">
+                                <h:outputText value="#{bundle.amount}: " style="font-size: 12px; font-weight: bold;"/>
+                                <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.amount}">
+                                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+                                </h:outputText>
+                            </h:panelGroup>
+
+                            <p:spacer height="10"/>
+
+                            <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.description}" escape="false" style="font-size: 14px; font-style: italic;" rendered="#{securityBackingMBean.isUserLeader}"/>
                         </h:panelGrid>
                     </h:form>
                 </div>

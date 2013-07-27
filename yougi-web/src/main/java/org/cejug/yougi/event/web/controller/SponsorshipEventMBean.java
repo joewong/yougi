@@ -23,13 +23,11 @@ package org.cejug.yougi.event.web.controller;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-
 import org.cejug.yougi.event.business.EventBean;
 import org.cejug.yougi.event.business.SponsorshipEventBean;
 import org.cejug.yougi.event.entity.Event;
@@ -66,14 +64,11 @@ public class SponsorshipEventMBean implements Serializable {
     private SponsorshipEvent sponsorshipEvent;
 
     private List<SponsorshipEvent> sponsorshipsEvent;
-
     private List<Event> events;
-
-    private String selectedEvent;
-
     private List<Partner> partners;
 
-    private String selectedSponsorship;
+    private String selectedEvent;
+    private String selectedPartner;
 
     public SponsorshipEventMBean() {
     }
@@ -141,12 +136,12 @@ public class SponsorshipEventMBean implements Serializable {
         return this.events;
     }
 
-    public String getSelectedSponsorship() {
-        return this.selectedSponsorship;
+    public String getSelectedPartner() {
+        return this.selectedPartner;
     }
 
-    public void setSelectedSponsorship(String selectedSponsor) {
-        this.selectedSponsorship = selectedSponsor;
+    public void setSelectedPartner(String selectedPartner) {
+        this.selectedPartner = selectedPartner;
     }
 
     public List<Partner> getPartners() {
@@ -166,7 +161,7 @@ public class SponsorshipEventMBean implements Serializable {
         if (this.id != null && !this.id.isEmpty()) {
             this.sponsorshipEvent = sponsorshipEventBean.findSponsorshipEvent(id);
             this.selectedEvent = this.sponsorshipEvent.getEvent().getId();
-            this.selectedSponsorship = this.sponsorshipEvent.getPartner().getId();
+            this.selectedPartner = this.sponsorshipEvent.getPartner().getId();
         } else {
             this.sponsorshipEvent = new SponsorshipEvent();
         }
@@ -176,15 +171,15 @@ public class SponsorshipEventMBean implements Serializable {
         Event evt = eventBean.findEvent(selectedEvent);
         this.sponsorshipEvent.setEvent(evt);
 
-        Partner spon = partnerBean.findPartner(selectedSponsorship);
+        Partner spon = partnerBean.findPartner(selectedPartner);
         this.sponsorshipEvent.setPartner(spon);
 
         sponsorshipEventBean.save(this.sponsorshipEvent);
-        return "sponsors?faces-redirect=true&eventId=" + evt.getId();
+        return "event?faces-redirect=true&tab=6&id=" + evt.getId();
     }
 
     public String remove() {
         sponsorshipEventBean.remove(this.sponsorshipEvent.getId());
-        return "sponsors?faces-redirect=true&eventId=" + this.event.getId();
+        return "event?faces-redirect=true&tab=6&id=" + this.event.getId();
     }
 }

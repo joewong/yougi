@@ -70,7 +70,7 @@
                         </p:submenu>
                         <p:submenu label="#{bundle.events}">
                             <p:menuitem value="#{bundle.events}" url="/event/events.xhtml"/>
-                            <p:menuitem value="#{bundle.venues}" url="/event/venues.xhtml"/>
+                            <p:menuitem value="#{bundle.venues}" url="/event/venues.xhtml" rendered="#{securityBackingMBean.isUserLeader}"/>
                         </p:submenu>
                         <p:submenu label="#{bundle.partnership}">
                             <p:menuitem value="#{bundle.partners}" url="/partnership/partners.xhtml"/>

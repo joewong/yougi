@@ -35,9 +35,12 @@
                     <h:form>
                         <h:panelGrid columns="2" width="100%" columnClasses="alignColumnLeft, alignColumnRight">
                             <h:outputText value="#{eventMBean.event}" style="font-size: 26px; font-weight: bold;"/>
-                            <p:button value="#{bundle.edit}" outcome="event_form" rendered="#{securityBackingMBean.isUserLeader}">
-                                <f:param name="id" value="#{eventMBean.event.id}"/>
-                            </p:button>
+                            <h:panelGroup>
+                                <p:button value="#{bundle.edit}" outcome="event_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                    <f:param name="id" value="#{eventMBean.event.id}"/>
+                                </p:button>
+                                <p:button value="#{bundle.back}" outcome="events"/>
+                            </h:panelGroup>
                         </h:panelGrid>
 
                         <p:tabView activeIndex="#{param.tab}">
@@ -212,11 +215,11 @@
                             </p:tab>
 
                             <p:tab title="#{bundle.speakers}">
-                                <h:button value="#{bundle.newSpeaker}" outcome="speaker_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                <p:button value="#{bundle.newSpeaker}" outcome="speaker_form" rendered="#{securityBackingMBean.isUserLeader}">
                                     <f:param name="eventId" value="#{eventMBean.event.id}"/>
-                                </h:button>
+                                </p:button>
                                 <p/>
-                                
+
                                 <h:panelGrid>
                                     <c:forEach var="spk" items="#{eventMBean.speakers}">
                                         <h:panelGroup>
@@ -285,10 +288,10 @@
                                     </p:dataTable>
                                 </h:panelGrid>
                             </p:tab>
-                            <p:tab title="#{bundle.venue}">
-                                <h:button value="#{bundle.addVenue}" outcome="event_venue_form" rendered="#{securityBackingMBean.isUserLeader}">
+                            <p:tab title="#{bundle.venues}">
+                                <p:button value="#{bundle.addVenue}" outcome="event_venue_form" rendered="#{securityBackingMBean.isUserLeader}">
                                     <f:param name="eventId" value="#{eventMBean.event.id}"/>
-                                </h:button>
+                                </p:button>
                                 <p/>
                                 <h:panelGrid width="100%">
                                     <p:dataGrid var="venue" value="#{eventMBean.venues}" columns="2" rows="0" paginator="false" rendered="#{! empty eventMBean.venues}">
@@ -302,6 +305,25 @@
                                                 </h:panelGrid>
                                             </p:panel>
                                         </p:column>
+                                    </p:dataGrid>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{bundle.sponsors}">
+                                <p:button value="#{bundle.newSponsor}" outcome="sponsor_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                    <f:param name="eventId" value="#{eventMBean.event.id}"/>
+                                </p:button>
+                                <p/>
+                                <h:panelGrid width="100%">
+                                    <p:dataGrid value="#{eventMBean.sponsors}" var="sponsor" columns="1" paginator="false" rendered="#{! empty eventMBean.sponsors}">
+                                        <p:panel>
+                                            <h:panelGrid>
+                                                <h:link value="#{sponsor.partner}" outcome="sponsor" style="font-size: 18px; font-weight: bold;">
+                                                    <f:param name="id" value="#{sponsor.id}"/>
+                                                    <f:param name="eventId" value="#{eventMBean.event.id}"/>
+                                                </h:link>
+                                                <h:outputText value="#{sponsor.sponsorshipLevel}"/>
+                                            </h:panelGrid>
+                                        </p:panel>
                                     </p:dataGrid>
                                 </h:panelGrid>
                             </p:tab>
