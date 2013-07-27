@@ -29,6 +29,7 @@ import org.cejug.yougi.event.entity.Event;
 import org.cejug.yougi.event.entity.Session;
 import org.cejug.yougi.event.entity.Speaker;
 import org.cejug.yougi.entity.EntitySupport;
+import org.cejug.yougi.entity.UserAccount;
 
 /**
  * @author Hildeberto Mendonca - http://www.hildeberto.com
@@ -47,18 +48,50 @@ public class SpeakerBean {
         return null;
     }
 
+    /**
+     * Returns the list of users who are not speakers yet. If a user is passed 
+     * by parameter he/she is included in the list even if he/she is already a
+     * speaker.
+     */
+    public List<UserAccount> findSpeakerCandidates(UserAccount except) {
+        List<UserAccount> candidates;
+        if(except != null) {
+            candidates = em.createQuery("select ua from UserAccount ua where ua not in (select s.userAccount from Speaker s where s.userAccount != :except) order by ua.firstName, ua.lastName asc")
+                           .setParameter("except", except)
+                           .getResultList();
+        }
+        else {
+            candidates = em.createQuery("select ua from UserAccount ua where ua not in (select s.userAccount from Speaker s) order by ua.firstName, ua.lastName asc")
+                           .getResultList();
+        }
+        return candidates;
+    }
+    
+    /**
+     * Returns the entire list of speakers from all registered events.
+     */
+    public List<Speaker> findSpeakers() {
+        return em.createQuery("select distinct s from Speaker s order by s.userAccount.firstName asc").getResultList();
+    }
+
+    /**
+     * Returns the list of speakers from a specific event only.
+     */
     public List<Speaker> findSpeakers(Event event) {
         return em.createQuery("select distinct ss.speaker from SpeakerSession ss where ss.session.event = :event order by ss.speaker.userAccount.firstName asc")
                                    .setParameter("event", event)
                                    .getResultList();
     }
 
+    /**
+     * Returns the list of speakers from a specific session only.
+     */
     public List<Speaker> findSpeakers(Session session) {
         return em.createQuery("select ss.speaker from SpeakerSession ss where ss.session = :session order by ss.speaker.userAccount.firstName asc")
                  .setParameter("session", session)
                  .getResultList();
     }
-
+    
     public void save(Speaker speaker) {
         if (EntitySupport.INSTANCE.isIdNotValid(speaker)) {
             speaker.setId(EntitySupport.INSTANCE.generateEntityId());

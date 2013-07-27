@@ -55,7 +55,7 @@ public class RoomBean {
                  .setParameter("venue", venue)
                  .getResultList();
     }
-
+    
     public void save(Room room) {
     	if(EntitySupport.INSTANCE.isIdNotValid(room)) {
             room.setId(EntitySupport.INSTANCE.generateEntityId());

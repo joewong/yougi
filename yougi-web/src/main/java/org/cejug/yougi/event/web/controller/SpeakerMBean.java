@@ -115,7 +115,12 @@ public class SpeakerMBean implements Serializable {
 
     public List<Speaker> getSpeakers() {
         if (this.speakers == null) {
-            this.speakers = speakerBean.findSpeakers(this.event);
+            if(this.event != null) {
+                this.speakers = speakerBean.findSpeakers(this.event);
+            }
+            else {
+                this.speakers = speakerBean.findSpeakers();
+            }
         }
         return this.speakers;
     }
@@ -136,7 +141,9 @@ public class SpeakerMBean implements Serializable {
 
     public List<Event> getEvents() {
         if (this.events == null) {
-            this.events = eventBean.findParentEvents();
+            if(this.speaker != null) {
+                this.events = sessionBean.findEventsSpeaker(this.speaker);
+            }
         }
         return this.events;
     }
@@ -146,7 +153,12 @@ public class SpeakerMBean implements Serializable {
      */
     public List<Session> getSessions() {
         if(this.sessions == null) {
-            this.sessions = sessionBean.findSessions(this.event);
+            if(this.event != null) {
+                this.sessions = sessionBean.findSessions(this.event);
+            }
+            else if (this.speaker != null) {
+                this.sessions = sessionBean.findSessionsSpeaker(this.speaker);
+            }
         }
         return sessions;
     }
@@ -155,6 +167,9 @@ public class SpeakerMBean implements Serializable {
      * @return the userAccounts
      */
     public List<UserAccount> getUserAccounts() {
+        if(this.userAccounts == null) {
+            this.userAccounts = speakerBean.findSpeakerCandidates(this.speaker.getUserAccount());
+        }
         return userAccounts;
     }
 
@@ -178,8 +193,6 @@ public class SpeakerMBean implements Serializable {
             this.speaker = speakerBean.findSpeaker(id);
             this.selectedUserAccount = this.speaker.getUserAccount().getId();
         }
-
-        this.userAccounts = userAccountBean.findUserAccounts();
     }
 
     public String save() {

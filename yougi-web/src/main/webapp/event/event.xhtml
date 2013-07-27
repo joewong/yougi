@@ -152,6 +152,11 @@
                             </p:tab>
 
                             <p:tab title="#{bundle.sessions}">
+                                <p:button value="#{bundle.newSession}" outcome="session_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                    <f:param name="eventId" value="#{eventMBean.event.id}"/>
+                                </p:button>
+                                <p/>
+                                
                                 <h:panelGrid width="100%">
                                     <c:forEach var="ses" items="#{eventMBean.sessions}">
                                         <h:panelGroup>

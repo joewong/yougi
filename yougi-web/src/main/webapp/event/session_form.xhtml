@@ -34,60 +34,101 @@
                     <h:form>
                         <h:messages globalOnly="true" styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/>
                         <h:panelGrid>
-                            <h:outputLabel for="event" value="#{bundle.event} *" styleClass="fieldLabel"/>
+                            <h:outputLabel for="event" value="#{bundle.event}" styleClass="requiredFieldLabel"/>
                             <h:selectOneMenu id="event" label="#{bundle.event}" value="#{sessionMBean.selectedEvent}" required="true">
                                 <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
                                 <f:selectItems value="#{sessionMBean.events}" var="event" itemLabel="#{event.name}" itemValue="#{event.id}"/>
                             </h:selectOneMenu>
                             <h:message for="event" errorClass="errorMessage"/>
 
-                            <h:outputLabel for="title" value="#{bundle.title} *" styleClass="fieldLabel"/>
-                            <h:inputText id="title" label="#{bundle.title}" value="#{sessionMBean.eventSession.title}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
-                            <h:message for="title" errorClass="errorMessage"/>
-
+                            <h:outputLabel for="name" value="#{bundle.name}" styleClass="requiredFieldLabel"/>
+                            <h:inputText id="name" label="#{bundle.name}" value="#{sessionMBean.session.name}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
+                            <h:message for="name" errorClass="errorMessage"/>
+                            
+                            <h:panelGrid columns="2">
+                                <h:outputLabel for="track" value="#{bundle.track}" styleClass="fieldLabel"/>
+                                <h:outputLabel for="experienceLevel" value="#{bundle.level}" styleClass="fieldLabel"/>
+                                
+                                <h:selectOneMenu id="track" label="#{bundle.track}" value="#{sessionMBean.selectedTrack}">
+                                    <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
+                                    <f:selectItems value="#{sessionMBean.tracks}" var="track" itemLabel="#{track.name}" itemValue="#{track.id}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu id="experienceLevel" label="#{bundle.level}" value="#{sessionMBean.session.experienceLevel}">
+                                    <f:selectItem itemLabel="#{bundle.introductory}" itemValue="INTRODUCTORY" />
+                                    <f:selectItem itemLabel="#{bundle.intermediate}" itemValue="INTERMEDIATE" />
+                                    <f:selectItem itemLabel="#{bundle.advanced}" itemValue="ADVANCED" />
+                                </h:selectOneMenu>
+                                
+                                <h:message for="track" errorClass="errorMessage"/>
+                                <h:message for="experienceLevel" errorClass="errorMessage"/>
+                            </h:panelGrid>
+                            
+                            <h:outputLabel for="topics" value="#{bundle.topics}" styleClass="fieldLabel"/>
+                            <h:inputText id="topics" label="#{bundle.topics}" value="#{sessionMBean.session.name}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
+                            <h:message for="name" errorClass="errorMessage"/>
+                            
                             <h:panelGrid columns="4">
-                                <h:outputLabel for="sessionDate" value="#{bundle.date}" styleClass="fieldLabel"/>
-                                <h:outputLabel for="startTime" value="#{bundle.start}" styleClass="fieldLabel"/>
-                                <h:outputLabel for="endTime" value="#{bundle.end}" styleClass="fieldLabel"/>
-                                <h:outputLabel for="room" value="#{bundle.room}" styleClass="fieldLabel"/>
+                                <h:outputLabel for="startDate" value="#{bundle.start}" styleClass="fieldLabel"/>
+                                <h:outputText/>
+                                <h:outputLabel for="endDate" value="#{bundle.end}" styleClass="fieldLabel"/>
+                                <h:outputText/>
 
-                                <p:calendar value="#{sessionMBean.eventSession.sessionDate}" id="sessionDate" pattern="#{bundle.formatDate}" size="10" timeZone="#{userProfileMBean.timeZone}"/>
-                                <p:inputMask id="startTime" value="#{sessionMBean.eventSession.startTime}" mask="99:99" size="5">
-                                    <f:convertDateTime pattern="#{bundle.formatTime}" timeZone="#{userProfileMBean.timeZone}"/>
-                                </p:inputMask>
-                                <p:inputMask id="endTime" value="#{sessionMBean.eventSession.endTime}" mask="99:99" size="5">
-                                    <f:convertDateTime pattern="#{bundle.formatTime}" timeZone="#{userProfileMBean.timeZone}"/>
-                                </p:inputMask>
-                                <h:inputText id="room" label="#{bundle.room}" value="#{sessionMBean.eventSession.room}" size="17" maxlength="30" class="ui-inputfield ui-state-default ui-corner-all"/>
+                                <p:calendar id="startDate" label="#{bundle.startDate}" value="#{sessionMBean.session.startDate}" pattern="#{bundle.formatDate}" required="true" size="10" timeZone="#{userProfileMBean.timeZone}"/>
+                                <p:calendar id="startTime" label="#{bundle.startHour}" value="#{sessionMBean.session.startTime}" pattern="#{bundle.formatTime}" size="5" timeOnly="true" required="true"/>
+                                <p:calendar id="endDate" label="#{bundle.endDate}" value="#{sessionMBean.session.endDate}" pattern="#{bundle.formatDate}" required="true" size="10" timeZone="#{userProfileMBean.timeZone}"/>
+                                <p:calendar id="endTime" label="#{bundle.endHour}" value="#{sessionMBean.session.endTime}" pattern="#{bundle.formatTime}" size="5" timeOnly="true" required="true"/>
 
-                                <h:message for="sessionDate" errorClass="errorMessage"/>
+                                <h:outputText value="#{bundle.formatDateLabel}" styleClass="fieldFormat"/>
+                                <h:outputText value="#{bundle.formatTimeLabel}" styleClass="fieldFormat"/>
+                                <h:outputText value="#{bundle.formatDateLabel}" styleClass="fieldFormat"/>
+                                <h:outputText value="#{bundle.formatTimeLabel}" styleClass="fieldFormat"/>
+
+                                <h:message for="startDate" errorClass="errorMessage"/>
                                 <h:message for="startTime" errorClass="errorMessage"/>
+                                <h:message for="endDate" errorClass="errorMessage"/>
                                 <h:message for="endTime" errorClass="errorMessage"/>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2">
+                                <h:outputLabel for="venue" value="#{bundle.venue}" styleClass="fieldLabel"/>
+                                <h:outputLabel for="room" value="#{bundle.room}" styleClass="fieldLabel"/>
+                                
+                                <h:selectOneMenu id="venue" label="#{bundle.venue}" value="#{sessionMBean.selectedVenue}">
+                                    <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
+                                    <f:selectItems value="#{sessionMBean.venues}" var="venue" itemLabel="#{venue.name}" itemValue="#{venue.id}"/>
+                                    <f:ajax render="room"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu id="room" label="#{bundle.room}" value="#{sessionMBean.selectedRoom}">
+                                    <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
+                                    <f:selectItems value="#{sessionMBean.rooms}" var="room" itemLabel="#{room.name}" itemValue="#{room.id}"/>
+                                </h:selectOneMenu>
+                                
+                                <h:message for="venue" errorClass="errorMessage"/>
                                 <h:message for="room" errorClass="errorMessage"/>
                             </h:panelGrid>
-
-                            <h:outputLabel for="abstract" value="#{bundle.abstract}" styleClass="fieldLabel"/>
-                            <h:inputTextarea id="abstract" value="#{sessionMBean.eventSession.abstract}" label="#{bundle.abstract}" rows="4" cols="45" class="ui-inputfield ui-state-default ui-corner-all"/>
-                            <h:message for="abstract" errorClass="errorMessage"/>
-
-                            <h:outputLabel for="topics" value="#{bundle.topics} *" styleClass="fieldLabel"/>
-                            <h:inputText id="topics" label="#{bundle.topics}" value="#{sessionMBean.eventSession.topics}" size="60" maxlength="255" class="ui-inputfield ui-state-default ui-corner-all"/>
-                            <h:message for="topics" errorClass="errorMessage"/>
+                            
+                            <h:outputLabel for="description" value="#{bundle.description}" styleClass="fieldLabel"/>
+                            <h:inputTextarea id="description" value="#{sessionMBean.session.description}" label="#{bundle.description}" rows="4" cols="60" class="ui-inputfield ui-state-default ui-corner-all"/>
+                            <h:message for="description" errorClass="errorMessage"/>
+                            
+                            <h:outputLabel for="detailedDescription" value="#{bundle.detailedDescription}" styleClass="fieldLabel"/>
+                            <h:inputTextarea id="detailedDescription" value="#{sessionMBean.session.detailedDescription}" label="#{bundle.detailedDescription}" rows="6" cols="60" class="ui-inputfield ui-state-default ui-corner-all"/>
+                            <h:message for="detailedDescription" errorClass="errorMessage"/>
                         </h:panelGrid>
 
-                        <h:inputHidden id="id" value="#{sessionMBean.eventSession.id}"/>
+                        <h:inputHidden id="id" value="#{sessionMBean.session.id}"/>
                         <p/>
                         <h:panelGrid columns="3">
                             <h:commandButton value="#{bundle.save}" action="#{sessionMBean.save}">
-                                <f:param name="eventId" value="#{sessionMBean.eventSession.event.id}"/>
-                                <f:param name="id" value="#{sessionMBean.eventSession.id}"/>
+                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                                <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
                             <h:commandButton value="#{bundle.remove}" action="#{sessionMBean.remove}" rendered="#{! empty sessionMBean.id}">
-                                <f:param name="eventId" value="#{sessionMBean.eventSession.event.id}"/>
-                                <f:param name="id" value="#{sessionMBean.eventSession.id}"/>
+                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                                <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
                             <h:button value="#{bundle.cancel}" outcome="sessions">
-                                <f:param name="eventId" value="#{sessionMBean.eventSession.event.id}"/>
+                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
                             </h:button>
                         </h:panelGrid>
                     </h:form>

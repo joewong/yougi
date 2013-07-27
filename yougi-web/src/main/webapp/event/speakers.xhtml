@@ -32,24 +32,22 @@
                 <div class="content">
                     <h1>#{bundle.speakers}</h1>
                     <h:outputText value="#{speakerMBean.event.name}" style="font-size: 18px; font-weight: bold;"/>
-                    <p><h:link outcome="speaker" value="#{bundle.newSpeaker}" rendered="#{securityBackingMBean.isUserLeader}">
+                    <p><h:link outcome="speaker_form" value="#{bundle.newSpeaker}" rendered="#{securityBackingMBean.isUserLeader}">
                            <f:param name="eventId" value="#{speakerMBean.event.id}"/>
                        </h:link></p>
                     <h:form>
-                        <p:dataTable value="#{speakerMBean.speakers}" var="speaker">
-                            <p:column>
-                                <f:facet name="header"><h:outputText value="#{bundle.name}"/></f:facet>
-                                <h:link outcome="speaker" value="#{speaker}">
-                                    <f:param name="id" value="#{speaker.id}"/>
-                                    <f:param name="eventId" value="#{speaker.event.id}"/>
-                                </h:link>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header"><h:outputText value="#{bundle.shortCv}"/></f:facet>
-                                <h:outputText value="#{speaker.shortCv}"/>
-                            </p:column>
-                        </p:dataTable>
+                        <p:dataGrid value="#{speakerMBean.speakers}" var="speaker" columns="3">
+                            <p:panel style="text-align: center">
+                                <h:panelGrid style="width: 100%">
+                                    <h:graphicImage value="#{profilePictureFinder.getPictureFromEmail(speaker.userAccount.email)}"/>
+                                    <h:link outcome="speaker" value="#{speaker}">
+                                        <f:param name="id" value="#{speaker.id}"/>
+                                        <f:param name="eventId" value="#{speakerMBean.event.id}"/>
+                                    </h:link>
+                                    <h:outputText value="#{speaker.organization}"/>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
                     </h:form>
                 </div>
             </ui:define>
