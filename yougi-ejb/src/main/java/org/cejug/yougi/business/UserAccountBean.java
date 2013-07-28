@@ -249,16 +249,13 @@ public class UserAccountBean {
     }
 
     /** <p>Register new user accounts. For the moment, this is the only way an
-     * user account can be created. In the moment of the registration, data,
-     * such as country, city, website, etc., are saved as a contact record. This
-     * contact record is related to the new user and it is set as his/her main
-     * contact. In case the user inform a city that does not exist, then his/her
-     * suggestion is registered, but checked as not valid. The server address is
+     * user account can be created.  This contact record is related to the new user 
+     * and it is set as his/her main contact. The server address is
      * informed just because it can only be detected automatically on the web
      * container.</p>
      * <p>When there is no user, the first registration creates a super user
      * with administrative rights.</p> */
-    public void register(UserAccount newUserAccount, Authentication authentication, City newCity) throws BusinessLogicException {
+    public void register(UserAccount newUserAccount, Authentication authentication) throws BusinessLogicException {
 
         // true if there is no account registered so far.
         boolean noAccount = thereIsNoAccount();
@@ -276,38 +273,12 @@ public class UserAccountBean {
                 userAccount.setUnverifiedEmail(newUserAccount.getUnverifiedEmail());
                 userAccount.setFirstName(newUserAccount.getFirstName());
                 userAccount.setLastName(newUserAccount.getLastName());
-                userAccount.setGender(newUserAccount.getGender());
-                userAccount.setWebsite(newUserAccount.getWebsite());
-                userAccount.setTwitter(newUserAccount.getTwitter());
-                userAccount.setMailingList(newUserAccount.getMailingList());
-                userAccount.setPublicProfile(newUserAccount.getPublicProfile());
-                userAccount.setEvent(newUserAccount.getEvent());
-                userAccount.setNews(newUserAccount.getNews());
-                userAccount.setGeneralOffer(newUserAccount.getGeneralOffer());
-                userAccount.setJobOffer(newUserAccount.getJobOffer());
-                userAccount.setSponsor(newUserAccount.getSponsor());
-                userAccount.setSpeaker(newUserAccount.getSpeaker());
+                userAccount.setGender(null);
                 userAccount.setDeactivated(false);
                 userAccount.setDeactivationDate(null);
                 userAccount.setDeactivationReason(null);
                 userAccount.setDeactivationType(null);
                 userAccount.setVerified(false);
-
-                Country country = newUserAccount.getCountry();
-                country = em.merge(country);
-                userAccount.setCountry(country);
-
-                Province province = newUserAccount.getProvince();
-                if(province != null) {
-                    province = em.merge(province);
-                }
-                userAccount.setProvince(province);
-
-                City city = newUserAccount.getCity();
-                if(city != null) {
-                    city = em.merge(city);
-                }
-                userAccount.setCity(city);
             }
         }
 
@@ -320,44 +291,7 @@ public class UserAccountBean {
         if(!noAccount) {
             ApplicationProperty timeZone = applicationPropertyBean.findApplicationProperty(Properties.TIMEZONE);
 
-            // A potential new city was informed.
-            if(newCity != null) {
-                // Check if the informed city already exists.
-                City existingCity = locationBean.findCityByName(newCity.getName());
-
-                // If the city exists it simply set the property of the user account.
-                if(existingCity != null) {
-                    userAccount.setCity(existingCity);
-                    if(existingCity.getTimeZone() != null) {
-                        userAccount.setTimeZone(existingCity.getTimeZone());
-                    }
-                    else {
-                        userAccount.setTimeZone(timeZone.getPropertyValue());
-                    }
-                }
-                else {
-                    // If the city does not exist it is created and used to set
-                    // the property of the user account.
-                    newCity.setTimeZone(timeZone.getPropertyValue());
-                    newCity.setCountry(userAccount.getCountry());
-                    newCity.setProvince(userAccount.getProvince());
-                    locationBean.saveCity(newCity);
-
-                    userAccount.setCity(newCity);
-                    userAccount.setTimeZone(newCity.getTimeZone());
-                }
-            }
-            else {
-                /* If no new city was informed, it just takes the selected one to set
-                 * timezone of the user account. */
-                if(userAccount.getCity() != null && userAccount.getCity().getTimeZone() != null) {
-                    userAccount.setTimeZone(userAccount.getCity().getTimeZone());
-                }
-                else {
-                    userAccount.setTimeZone(timeZone.getPropertyValue());
-                }
-            }
-
+            userAccount.setTimeZone(timeZone.getPropertyValue());
             userAccount.defineNewConfirmationCode();
         }
 
@@ -367,7 +301,7 @@ public class UserAccountBean {
             userAccount.setId(EntitySupport.INSTANCE.generateEntityId());
             em.persist(userAccount);
         }
-
+        
         authentication.setUserAccount(userAccount);
         em.persist(authentication);
 
