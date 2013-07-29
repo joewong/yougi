@@ -219,27 +219,16 @@ public class UserAccountMBean implements Serializable {
 
         boolean isFirstUser = userAccountBean.thereIsNoAccount();
 
-        if(!isFirstUser && this.locationMBean.getCity() == null && (this.locationMBean.getCityNotListed() == null || this.locationMBean.getCityNotListed().isEmpty())) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, ResourceBundleHelper.INSTANCE.getMessage("errorCode0006"),""));
-            context.validationFailed();
-        }
-
         if(context.isValidationFailed()) {
             return "registration";
         }
-
-        this.userAccount.setCountry(this.locationMBean.getCountry());
-    	this.userAccount.setProvince(this.locationMBean.getProvince());
-    	this.userAccount.setCity(this.locationMBean.getCity());
-
-        City newCity = locationMBean.getNotListedCity();
 
         Authentication authentication = new Authentication();
         try {
             authentication.setUserAccount(this.userAccount);
             authentication.setUsername(userAccount.getUnverifiedEmail());
             authentication.setPassword(this.password);
-            userAccountBean.register(userAccount, authentication, newCity);
+            userAccountBean.register(userAccount, authentication);
         }
         catch(Exception e) {
             context.addMessage(userId, new FacesMessage(e.getCause().getMessage()));
