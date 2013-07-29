@@ -56,6 +56,11 @@
                                 <f:facet name="header"><h:outputText value="#{bundle.valid}"/></f:facet>
                                 <h:graphicImage rendered="#{city.valid}" url="/images/success-icon.png"/>
                             </p:column>
+
+                            <p:column>
+                                <f:facet name="header"><h:outputText value="#{bundle.timeZone}"/></f:facet>
+                                <h:outputText value="#{city.timeZone}"/>
+                            </p:column>
                         </p:dataTable>
                     </h:form>
                 </div>

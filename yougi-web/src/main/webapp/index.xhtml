@@ -58,8 +58,8 @@
                                                 <f:convertDateTime type="time" timeStyle="short" pattern="#{bundle.formatTime}" timeZone="#{userProfileMBean.timeZone}"/>
                                             </h:outputText>
                                         </h:panelGroup>
-                                        <h:panelGroup> 
-                                            <h:link value="#{bundle.moreInformation}" outcome="event">
+                                        <h:panelGroup>
+                                            <h:link value="#{bundle.moreInformation}" outcome="event/event">
                                                 <f:param name="id" value="#{event.id}"/>
                                             </h:link>
                                             <h:outputText value=" | "/>

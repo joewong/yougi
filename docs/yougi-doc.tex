@@ -394,7 +394,9 @@ The driver installation consists on saving the driver file in a specific AS libr
 \section{Creating a Database Connection Pool}
 \label{sec:creating-database-connection-pool}
 
-The database connection pool is managed by the AS. There are many ways to create a connection pool. We are going to show two possibilities: changing configuration files directly and using the Administrative Console.
+The database connection pool is managed by the AS. There are many ways to create a connection pool. We are going to show three possibilities: changing the configuration file directly, using the Administrative Console, and using the asadmin command line.
+
+\subsection{Changing the Configuration File}
 
 To create the database connection pool through the configuration file, open the file [glassfish\_home]/glassfish/domains/domain1/config/domain.xml. Go to the element \textless resources\textgreater \ and add the following connection pool and jdbc resource under the last closing \textless /jdbc-connection-pool\textgreater \ element.
 
@@ -426,6 +428,8 @@ Now, find the element \textless server name=''server'' config-ref=''server-confi
 </server>
 \end{verbatim}
 
+\subsection{Using the Administrative Console}
+
 If you prefer to do it in the Administrative Console, you can go through the following steps:
 
 \begin{enumerate}
@@ -456,9 +460,40 @@ Now, we create a JNDI name for it at \textit{Resources/JDBC/JDBC Resources}.
 
 The only information the application knows about the database is the jdbc resource jndi name, which is ''jdbc/ug''. This is important because the application should not contain any security related data, such as database's username and password. We should let the server administrator define these configuration on the server, according to his security principles.
 
+\subsection{Using the Command Line}
+
+It is also possible to configure Glassfish using the asadmin utility, a command line tool to perform administrative tasks. In the terminal, navigate to [glassfish-home]/bin and execute the command:
+
+\begin{verbatim}
+# ./asadmin
+\end{verbatim}
+
+The asadmin prompt becomes available to accept commands. Check the server version to make sure it is working properly:
+
+\begin{verbatim}
+asadmin> version
+\end{verbatim}
+
+You can now proceed with the commands to create the connection pool:
+
+\begin{verbatim}
+asadmin> create-jdbc-connection-pool 
+--datasourceclassname com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource 
+--restype javax.sql.ConnectionPoolDataSource
+--property user=ug_user:password=[password]:databaseName=ug:port=3306 UGPool
+\end{verbatim}
+
+and the jdbc resource:
+
+\begin{verbatim}
+asadmin> create-jdbc-resource --connectionpoolid UGPool jdbc/ug
+\end{verbatim}
+
 \section{Creating a JavaMail Session}
 
 Besides managing the connections to the email server, the JavaMail session stores security parameters, such as user name, password, SSL, the kind of server available and so on. These parameters are defined in a case by case basis, thus the JavaMail service provided by the application server is essential for the distribution of this application.
+
+\subsection{Changing the Configuration File}
 
 You can configure JavaMail directly in the domain.xml file, by copying and pasting the xml below after the element \textless jdbc-resource\textgreater, and then change the values according to your email server.
 
@@ -488,6 +523,8 @@ Add the element \textless resource-ref\textgreater \ of this new resource after 
    <resource-ref ref="mail/ug"/>
 </server>
 \end{verbatim}
+
+\subsection{Using the Administrative Console}
 
 To configure JavaMail using the Administrative Console, follow the steps below:
 
@@ -521,11 +558,15 @@ If the server doesn't request secure authentication, then the three steps above 
 
 More supported JavaMail properties can be found on Table \ref{tab:javamail-properties} in the Appendix.
 
+\subsection{Using the Command Line}
+
 \section{Creating a Security Realm}
 
 A realm is a security policy domain available on Glassfish to provide authentication and authorization services for web applications. A realm contains a collection of users and their assignements to groups and roles.
 
 As the connection pool and the JavaMail session, the security realm is also a configuration entirely made in the application server. Since Yougi's users are stored in the database, we have to use a realm based on JDBC. The JDBC Realm uses the data source created in section \ref{sec:creating-database-connection-pool} to access users' data on Yougi's database.
+
+\subsection{Changing the Configuration File}
 
 As usual, we start with the fastest configuration option, by directly changing the domain.xml file. Copy and paste the xml below within the element \textless security-service\textgreater .
 
@@ -549,6 +590,8 @@ As usual, we start with the fastest configuration option, by directly changing t
 </security-service>
 \end{verbatim}
 
+\subsection{Using the Administrative Console}
+
 If you prefer, you can always use the Adminstrative Console to configure the JDBC Realm. Just follow the steps below:
 
 \begin{enumerate}
@@ -570,6 +613,8 @@ If you prefer, you can always use the Adminstrative Console to configure the JDB
    \end{enumerate}
 \item Restart the application server to activate the realm.
 \end{enumerate}
+
+\subsection{Using the Command Line}
 
 \section{Deploying the Application Package}
 

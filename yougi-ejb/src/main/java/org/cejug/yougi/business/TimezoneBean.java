@@ -18,73 +18,66 @@
  * find it, write to the Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA 02111-1307 USA.
  * */
-package org.cejug.yougi.event.business;
+package org.cejug.yougi.business;
 
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.cejug.yougi.event.entity.Venue;
-import org.cejug.yougi.entity.EntitySupport;
-import org.cejug.yougi.event.entity.Event;
+import org.cejug.yougi.entity.Timezone;
 
 /**
- * Manages venues.
+ * Manages user-friendly time zones.
  *
  * @author Hildeberto Mendonca - http://www.hildeberto.com
  */
 @Stateless
 @LocalBean
-public class VenueBean {
+public class TimezoneBean {
 
     @PersistenceContext
     private EntityManager em;
 
-    public Venue findVenue(String id) {
+    public Timezone findTimezone(String id) {
         if(id != null) {
-            return em.find(Venue.class, id);
+            return em.find(Timezone.class, id);
         }
         else {
             return null;
         }
     }
 
-    public List<Venue> findVenues() {
-    	return em.createQuery("select v from Venue v order by v.name asc")
+    public Timezone findDefaultTimezone() {
+        return em.createQuery("select tz from Timezone tz where tz.defaultTz = true", Timezone.class).getSingleResult();
+    }
+
+    public List<Timezone> findTimezones() {
+        return em.createQuery("select tz from Timezone tz order by tz.rawOffset asc", Timezone.class)
                  .getResultList();
     }
 
-    public List<Venue> findEventVenues(Event event) {
-        if(event == null) {
-            return null;
+    public void save(Timezone timezone) {
+        if(timezone.getDefaultTz()) {
+            Timezone defaultTimezone = findDefaultTimezone();
+            if(!timezone.equals(defaultTimezone)) {
+                defaultTimezone.setDefaultTz(Boolean.FALSE);
+            }
         }
 
-        List<Venue> venues = em.createQuery("select ev.venue from EventVenue ev where ev.event = :event")
-                               .setParameter("event", event)
-                               .getResultList();
-
-        if((venues == null || venues.isEmpty()) && event.getParent() != null) {
-            venues = findEventVenues(event.getParent());
-        }
-
-        return venues;
-    }
-
-    public void save(Venue venue) {
-    	if(EntitySupport.INSTANCE.isIdNotValid(venue)) {
-            venue.setId(EntitySupport.INSTANCE.generateEntityId());
-            em.persist(venue);
+        Timezone existingTimezone = em.find(Timezone.class, timezone.getId());
+        if(existingTimezone == null) {
+            em.persist(timezone);
         }
         else {
-            em.merge(venue);
+            em.merge(timezone);
         }
     }
 
     public void remove(String id) {
-        Venue venue = findVenue(id);
-        if(venue != null) {
-            em.remove(venue);
+        Timezone timezone = em.find(Timezone.class, id);
+        if(timezone != null) {
+            em.remove(timezone);
         }
     }
 }

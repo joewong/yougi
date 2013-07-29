@@ -51,10 +51,22 @@ public class EventVenueBean {
 
     public List<Venue> findEventVenues(Event event) {
         return em.createQuery("select ev.venue from EventVenue ev where ev.event = :event order by ev.venue.name asc")
-                                         .setParameter("event", event)
-                                         .getResultList();
+                 .setParameter("event", event)
+                 .getResultList();
     }
 
+    public List<Venue> findVenues(Event except) {
+        return em.createQuery("select v from Venue v where v not in (select ev.venue from EventVenue ev where ev.event = :event) order by v.name asc")
+                 .setParameter("event", except)
+                 .getResultList();
+    }
+    
+    public List<Event> findEvents(Venue except) {
+        return em.createQuery("select e from Event e where e not in (select ev.event from EventVenue ev where ev.venue = :venue) order by e.name asc")
+                 .setParameter("venue", except)
+                 .getResultList();
+    }
+    
     public List<Event> findEventsVenue(Venue venue) {
         return em.createQuery("select ev.event from EventVenue ev where ev.venue = :venue order by ev.event.name asc")
                                          .setParameter("venue", venue)

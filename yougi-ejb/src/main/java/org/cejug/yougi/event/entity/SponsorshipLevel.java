@@ -21,10 +21,10 @@
 package org.cejug.yougi.event.entity;
 
 /**
- * Lists all types of sponsorship.
+ * Lists all levels of sponsorship.
  *
  * @author Hildeberto Mendonca - http://www.hildeberto.com
  */
 public enum SponsorshipLevel {
-    DIAMOND, TITANIUM, PLATINIUM, GOLD, SILVER, BRONZE;
+    DIAMOND, TITANIUM, PLATINUM, GOLD, SILVER, BRONZE;
 }

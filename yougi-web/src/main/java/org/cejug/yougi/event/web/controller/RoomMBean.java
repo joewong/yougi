@@ -170,6 +170,6 @@ public class RoomMBean implements Serializable {
 
         roomBean.save(this.room);
 
-        return "venue?faces-redirect=true&id="+ this.selectedVenue;
+        return "venue?faces-redirect=true&tab=1&id="+ this.selectedVenue;
     }
 }

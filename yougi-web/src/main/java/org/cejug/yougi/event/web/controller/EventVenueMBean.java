@@ -58,9 +58,9 @@ public class EventVenueMBean implements Serializable {
     @ManagedProperty(value = "#{param.venueId}")
     private String venueId;
 
-    private List<Event> events;
     private List<Venue> venues;
-
+    private List<Event> events;
+    
     private String selectedVenue;
     private String selectedEvent;
 
@@ -98,14 +98,26 @@ public class EventVenueMBean implements Serializable {
 
     public List<Venue> getVenues() {
         if(this.venues == null) {
-            this.venues = venueBean.findVenues();
+            if(this.selectedEvent == null || this.selectedEvent.isEmpty()) {
+                this.venues = venueBean.findVenues();
+            }
+            else {
+                Event event = new Event(selectedEvent);
+                this.venues = eventVenueBean.findVenues(event);
+            }
         }
         return this.venues;
     }
 
     public List<Event> getEvents() {
         if(this.events == null) {
-            this.events = eventBean.findParentEvents();
+            if(this.selectedVenue == null || this.selectedVenue.isEmpty()) {
+                this.events = eventBean.findParentEvents();
+            }
+            else {
+                Venue venue = new Venue(selectedVenue);
+                this.events = eventVenueBean.findEvents(venue);
+            }
         }
         return this.events;
     }
@@ -128,6 +140,19 @@ public class EventVenueMBean implements Serializable {
 
         eventVenueBean.save(eventVenue);
 
-        return "venue?faces-redirect=true&id="+ this.selectedVenue;
+        return getNextPage();
+    }
+    
+    public String cancel() {
+        return getNextPage();
+    }
+    
+    private String getNextPage() {
+        if (this.eventId != null && !this.eventId.isEmpty()) {
+            return "event?faces-redirect=true&tab=5&id="+ this.selectedEvent;
+        }
+        else {
+            return "venue?faces-redirect=true&id="+ this.selectedVenue;
+        }
     }
 }

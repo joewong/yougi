@@ -28,10 +28,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import org.cejug.yougi.business.LocationBean;
+import org.cejug.yougi.business.TimezoneBean;
 import org.cejug.yougi.business.UserAccountBean;
 import org.cejug.yougi.entity.City;
 import org.cejug.yougi.entity.Country;
 import org.cejug.yougi.entity.Province;
+import org.cejug.yougi.entity.Timezone;
 import org.cejug.yougi.entity.UserAccount;
 
 /**
@@ -46,6 +48,9 @@ public class CityMBean implements Serializable {
     private LocationBean locationBean;
 
     @EJB
+    private TimezoneBean timezoneBean;
+
+    @EJB
     private UserAccountBean userAccountBean;
 
     @ManagedProperty(value = "#{param.id}")
@@ -55,6 +60,9 @@ public class CityMBean implements Serializable {
     private LocationMBean locationMBean;
 
     private City city;
+
+    private List<City> cities;
+    private List<Timezone> timezones;
 
     public CityMBean() {
         this.city = new City();
@@ -85,15 +93,21 @@ public class CityMBean implements Serializable {
     }
 
     public List<City> getCities() {
-        return locationBean.findCities();
+        if(this.cities == null) {
+            this.cities = locationBean.findCities();
+        }
+        return this.cities;
     }
 
     public List<UserAccount> getInhabitants() {
         return userAccountBean.findInhabitantsFrom(this.city);
     }
 
-    public List<String> getTimeZones() {
-        return locationBean.getTimeZones();
+    public List<Timezone> getTimezones() {
+        if(this.timezones == null) {
+            this.timezones = timezoneBean.findTimezones();
+        }
+        return this.timezones;
     }
 
     @PostConstruct

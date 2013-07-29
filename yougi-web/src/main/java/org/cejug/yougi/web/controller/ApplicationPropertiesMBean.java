@@ -32,9 +32,10 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.cejug.yougi.business.ApplicationPropertyBean;
 import org.cejug.yougi.business.LanguageBean;
-import org.cejug.yougi.business.LocationBean;
+import org.cejug.yougi.business.TimezoneBean;
 import org.cejug.yougi.entity.Language;
 import org.cejug.yougi.entity.Properties;
+import org.cejug.yougi.entity.Timezone;
 import org.cejug.yougi.util.ResourceBundleHelper;
 
 /**
@@ -45,16 +46,21 @@ import org.cejug.yougi.util.ResourceBundleHelper;
 public class ApplicationPropertiesMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @EJB
     private ApplicationPropertyBean applicationPropertyBean;
+
     @EJB
-    private LocationBean locationBean;
+    private TimezoneBean timezoneBean;
+
     @EJB
     private LanguageBean languageBean;
+
     private Map<String, String> applicationProperties;
     private Boolean sendEmails;
     private Boolean captchaEnabled;
     private List<Language> languages;
+    private List<Timezone> timezones;
 
     public Map<String, String> getApplicationProperties() {
         return applicationProperties;
@@ -80,8 +86,11 @@ public class ApplicationPropertiesMBean implements Serializable {
         this.captchaEnabled = captchaEnabled;
     }
 
-    public List<String> getTimeZones() {
-        return locationBean.getTimeZones();
+    public List<Timezone> getTimezones() {
+        if(this.timezones == null) {
+            this.timezones = timezoneBean.findTimezones();
+        }
+        return this.timezones;
     }
 
     public List<Language> getLanguages() {

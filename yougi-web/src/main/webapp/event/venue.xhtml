@@ -39,16 +39,16 @@
 
                             <h:panelGrid columns="2" width="100%" columnClasses="alignColumnLeft, alignColumnRight">
                                 <h:outputText value="#{venueMBean.venue}" style="font-size: 26px; font-weight: bold;"/>
-                                <h:button value="#{bundle.edit}" outcome="venue_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                <p:button value="#{bundle.edit}" outcome="venue_form" rendered="#{securityBackingMBean.isUserLeader}">
                                     <f:param name="id" value="#{venueMBean.venue.id}"/>
-                                </h:button>
+                                </p:button>
                             </h:panelGrid>
 
                             <h:outputText value="#{venueMBean.venue.location}"/>
 
                             <p:spacer height="10"/>
 
-                            <p:tabView>
+                            <p:tabView activeIndex="#{param.tab}">
                                 <p:tab title="#{bundle.events}">
                                     <h:button value="#{bundle.addEvent}" outcome="event_venue_form" rendered="#{securityBackingMBean.isUserLeader}">
                                         <f:param name="venueId" value="#{venueMBean.venue.id}"/>

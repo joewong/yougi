@@ -70,6 +70,7 @@
                         </p:submenu>
                         <p:submenu label="#{bundle.events}">
                             <p:menuitem value="#{bundle.events}" url="/event/events.xhtml"/>
+                            <p:menuitem value="#{bundle.speakers}" url="/event/speakers.xhtml"/>
                             <p:menuitem value="#{bundle.venues}" url="/event/venues.xhtml"/>
                         </p:submenu>
                         <p:submenu label="#{bundle.partnership}">
@@ -83,10 +84,11 @@
                         <p:submenu label="#{bundle.administration}" rendered="#{securityBackingMBean.isUserAdministrator}">
                             <p:menuitem value="#{bundle.users}" url="/admin/users.xhtml"/>
                             <p:menuitem value="#{bundle.groups}" url="/admin/groups.xhtml"/>
-                            <p:submenu label="#{bundle.location}">
+                            <p:submenu label="#{bundle.locations}">
                                 <p:menuitem value="#{bundle.countries}" url="/admin/countries.xhtml"/>
                                 <p:menuitem value="#{bundle.provinces}" url="/admin/provinces.xhtml"/>
                                 <p:menuitem value="#{bundle.cities}" url="/admin/cities.xhtml"/>
+                                <p:menuitem value="#{bundle.timeZones}" url="/admin/timezones.xhtml"/>
                             </p:submenu>
                             <p:menuitem value="#{bundle.languages}" url="/admin/languages.xhtml"/>
                             <p:menuitem value="#{bundle.messageTemplates}" url="/admin/message_templates.xhtml"/>

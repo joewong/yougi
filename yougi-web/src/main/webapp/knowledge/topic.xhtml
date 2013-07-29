@@ -55,9 +55,9 @@
                         </h:panelGrid>
                         <h:panelGrid columns="3">
                             <h:commandButton value="#{bundle.save}" action="#{topicMBean.save}" rendered="#{securityBackingMBean.isUserLeader}"/>
-                            <h:commandButton value="#{bundle.remove}" action="#{topicMBean.remove}" rendered="#{securityBackingMBean.isUserLeader and topicMBean.existent}" onclick="return confirmAction('Are you sure?');">
+                            <h:commandButton value="#{bundle.remove}" action="#{topicMBean.remove}" rendered="#{securityBackingMBean.isUserLeader and topicMBean.existent}" onclick="return confirmAction('#{bundle.warnCode0005}');">
                                 <f:param name="topic" value="#{topicMBean.topic.name}"/>
-                            </h:commandButton>    
+                            </h:commandButton>
                             <h:button value="#{bundle.cancel}" outcome="topics"/>
                         </h:panelGrid>
                     </h:form>

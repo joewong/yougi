@@ -49,11 +49,13 @@ import org.cejug.yougi.event.business.EventBean;
 import org.cejug.yougi.event.business.EventVenueBean;
 import org.cejug.yougi.event.business.SessionBean;
 import org.cejug.yougi.event.business.SpeakerBean;
+import org.cejug.yougi.event.business.SponsorshipEventBean;
 import org.cejug.yougi.event.business.TrackBean;
 import org.cejug.yougi.event.entity.Attendee;
 import org.cejug.yougi.event.entity.Event;
 import org.cejug.yougi.event.entity.Session;
 import org.cejug.yougi.event.entity.Speaker;
+import org.cejug.yougi.event.entity.SponsorshipEvent;
 import org.cejug.yougi.event.entity.Track;
 import org.cejug.yougi.event.entity.Venue;
 import org.cejug.yougi.web.controller.UserProfileMBean;
@@ -93,6 +95,9 @@ public class EventMBean {
     private EventVenueBean eventVenueBean;
 
     @EJB
+    private SponsorshipEventBean sponsorshipEventBean;
+
+    @EJB
     private ApplicationPropertyBean applicationPropertyBean;
 
     @ManagedProperty(value = "#{param.id}")
@@ -102,28 +107,19 @@ public class EventMBean {
     private UserProfileMBean userProfileMBean;
 
     private Event event;
-
     private Attendee attendee;
-
     private String selectedParent;
 
     private List<Event> events;
-
     private List<Event> subEvents;
-
     private List<Event> parentEvents;
-
     private List<Venue> venues;
-
     private List<Event> commingEvents;
-
     private List<Session> sessions;
-
     private List<Track> tracks;
-
     private List<Speaker> speakers;
-
     private List<Attendee> attendees;
+    private List<SponsorshipEvent> sponsors;
 
     private Long numberPeopleAttending;
 
@@ -264,6 +260,13 @@ public class EventMBean {
             attendees = attendeeBean.findAllAttendees(this.event);
         }
         return attendees;
+    }
+
+    public List<SponsorshipEvent> getSponsors() {
+        if(sponsors == null) {
+            sponsors = sponsorshipEventBean.findSponsorshipsEvent(this.event);
+        }
+        return sponsors;
     }
 
     public Long getNumberPeopleAttending() {
