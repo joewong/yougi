@@ -36,7 +36,7 @@
                             <p:tab title="#{bundle.allUsers}">
                                 <h:panelGrid columns="3">
                                     <h:outputLabel for="emailCriteria" value="#{bundle.email}" styleClass="fieldLabel"/>
-                                    <h:inputText id="emailCriteria" label="#{bundle.email}" size="30" maxlength="100" value="#{memberMBean.emailCriteria}" onchange="formatEmail(this)"/>
+                                    <h:inputText id="emailCriteria" label="#{bundle.email}" size="30" maxlength="100" value="#{memberMBean.emailCriteria}" onchange="formatEmail(this);"/>
                                     <h:commandButton action="#{memberMBean.findUserAccountByEmail}" value="#{bundle.search}"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="26" cellspacing="0" cellpadding="0">
@@ -72,11 +72,6 @@
                                     <p:column>
                                         <f:facet name="header"><h:outputText value="#{bundle.firstName}"/></f:facet>
                                         <h:commandLink value="#{member.firstName} #{member.lastName}" action="#{memberMBean.load(member.id)}"/>
-                                    </p:column>
-                                    <p:column style="text-align: center;">
-                                        <f:facet name="header"><h:outputText value="#{bundle.gender}"/></f:facet>
-                                        <h:graphicImage url="/images/male.png" rendered="#{member.gender == 'MALE'}"/>
-                                        <h:graphicImage url="/images/female.png" rendered="#{member.gender == 'FEMALE'}"/>
                                     </p:column>
                                     <p:column>
                                         <f:facet name="header"><h:outputText value="#{bundle.email}"/></f:facet>
@@ -129,7 +124,7 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab title="#{bundle.privacy}">
-                                <p:barChart value="#{communicationPrivacyRange.communicationPrivacyModel}" legendPosition="ne" stacked="true" xaxisLabel="#{range.rangeName}"/>
+                                <!--<p:barChart value="#{communicationPrivacyRange.communicationPrivacyModel}" legendPosition="ne" stacked="true" xaxisLabel="#{range.rangeName}"/>-->
                             </p:tab>
                             <p:tab title="#{bundle.growth}">
                                 <h2>#{bundle.growth}</h2>

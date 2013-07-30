@@ -37,8 +37,8 @@
                             <p:tab title="#{bundle.profile}">
                                 <h:messages globalOnly="true" styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/>
                                 <h:panelGrid columns="2">
-                                    <h:outputLabel for="firstName" value="#{bundle.firstName} *" styleClass="fieldLabel"/>
-                                    <h:outputLabel for="lastName" value="#{bundle.lastName} *" styleClass="fieldLabel"/>
+                                    <h:outputLabel for="firstName" value="#{bundle.firstName}" styleClass="requiredFieldLabel"/>
+                                    <h:outputLabel for="lastName" value="#{bundle.lastName}" styleClass="requiredFieldLabel"/>
 
                                     <h:panelGroup>
                                         <h:inputText id="firstName" label="#{bundle.firstName}" required="true" size="35" maxlength="50" value="#{memberMBean.userAccount.firstName}"/>
@@ -49,19 +49,19 @@
                                         <h:message for="lastName" errorClass="errorMessage"/>
                                     </h:panelGroup>
 
-                                    <h:outputText value="#{bundle.email} *" styleClass="fieldLabel"/>
-                                    <h:outputText value="#{bundle.username} *" styleClass="fieldLabel"/>
+                                    <h:outputText value="#{bundle.email}" styleClass="requiredFieldLabel"/>
+                                    <h:outputText value="#{bundle.username} *" styleClass="requiredFieldLabel"/>
 
                                     <h:outputLink value="mailto:#{memberMBean.userAccount.postingEmail}">
                                         <f:verbatim>#{memberMBean.userAccount.postingEmail}</f:verbatim>
                                     </h:outputLink>
                                     <h:outputText value="#{memberMBean.authentication.username}"/>
 
-                                    <h:outputLabel for="gender" value="#{bundle.gender} *" styleClass="fieldLabel"/>
+                                    <h:outputLabel for="gender" value="#{bundle.gender}" styleClass="fieldLabel"/>
                                     <h:outputText/>
 
                                     <h:panelGroup>
-                                        <h:selectOneRadio id="gender" label="#{bundle.gender}" required="true" value="#{memberMBean.userAccount.gender}">
+                                        <h:selectOneRadio id="gender" label="#{bundle.gender}" value="#{memberMBean.userAccount.gender}">
                                             <f:selectItem itemLabel="#{bundle.male}" itemValue="MALE"/>
                                             <f:selectItem itemLabel="#{bundle.female}" itemValue="FEMALE"/>
                                         </h:selectOneRadio>

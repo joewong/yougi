@@ -21,13 +21,11 @@
 package org.cejug.yougi.business;
 
 import org.cejug.yougi.entity.City;
-import org.cejug.yougi.entity.Province;
 import org.cejug.yougi.entity.ApplicationProperty;
 import org.cejug.yougi.entity.AccessGroup;
 import org.cejug.yougi.entity.UserGroup;
 import org.cejug.yougi.entity.Authentication;
 import org.cejug.yougi.entity.Properties;
-import org.cejug.yougi.entity.Country;
 import org.cejug.yougi.entity.DeactivationType;
 import org.cejug.yougi.entity.UserAccount;
 import java.text.Format;
@@ -62,9 +60,6 @@ public class UserAccountBean {
 
     @EJB
     private UserGroupBean userGroupBean;
-
-    @EJB
-    private LocationBean locationBean;
 
     @EJB
     private MessengerBean messengerBean;
