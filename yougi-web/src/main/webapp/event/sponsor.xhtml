@@ -51,7 +51,9 @@
                                 <f:param name="id" value="#{sponsorshipEventMBean.sponsorshipEvent.event.id}"/>
                             </h:link>
 
-                            <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.sponsorshipLevel}" style="font-size: 14px;"/>
+                            <h:outputText value="#{sponsorshipEventMBean.sponsorshipEvent.sponsorshipLevel}" style="font-size: 14px;">
+                                <f:converter converterId="SponsorshipLevelConverter"/>
+                            </h:outputText>
 
                             <p:spacer height="10"/>
 

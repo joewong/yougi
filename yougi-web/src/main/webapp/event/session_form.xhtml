@@ -31,42 +31,44 @@
             <ui:define name="content">
                 <div class="content">
                     <h1>#{bundle.session}</h1>
-                    <h:form>
+                    <h:form id="sessionForm">
                         <h:messages globalOnly="true" styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/>
                         <h:panelGrid>
                             <h:outputLabel for="event" value="#{bundle.event}" styleClass="requiredFieldLabel"/>
                             <h:selectOneMenu id="event" label="#{bundle.event}" value="#{sessionMBean.selectedEvent}" required="true">
                                 <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
                                 <f:selectItems value="#{sessionMBean.events}" var="event" itemLabel="#{event.name}" itemValue="#{event.id}"/>
+                                <f:ajax render="venue"/>
                             </h:selectOneMenu>
                             <h:message for="event" errorClass="errorMessage"/>
 
                             <h:outputLabel for="name" value="#{bundle.name}" styleClass="requiredFieldLabel"/>
                             <h:inputText id="name" label="#{bundle.name}" value="#{sessionMBean.session.name}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
                             <h:message for="name" errorClass="errorMessage"/>
-                            
+
                             <h:panelGrid columns="2">
                                 <h:outputLabel for="track" value="#{bundle.track}" styleClass="fieldLabel"/>
                                 <h:outputLabel for="experienceLevel" value="#{bundle.level}" styleClass="fieldLabel"/>
-                                
+
                                 <h:selectOneMenu id="track" label="#{bundle.track}" value="#{sessionMBean.selectedTrack}">
                                     <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
                                     <f:selectItems value="#{sessionMBean.tracks}" var="track" itemLabel="#{track.name}" itemValue="#{track.id}"/>
                                 </h:selectOneMenu>
                                 <h:selectOneMenu id="experienceLevel" label="#{bundle.level}" value="#{sessionMBean.session.experienceLevel}">
-                                    <f:selectItem itemLabel="#{bundle.introductory}" itemValue="INTRODUCTORY" />
-                                    <f:selectItem itemLabel="#{bundle.intermediate}" itemValue="INTERMEDIATE" />
+                                    <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
                                     <f:selectItem itemLabel="#{bundle.advanced}" itemValue="ADVANCED" />
+                                    <f:selectItem itemLabel="#{bundle.intermediate}" itemValue="INTERMEDIATE" />
+                                    <f:selectItem itemLabel="#{bundle.introductory}" itemValue="INTRODUCTORY" />
                                 </h:selectOneMenu>
-                                
+
                                 <h:message for="track" errorClass="errorMessage"/>
                                 <h:message for="experienceLevel" errorClass="errorMessage"/>
                             </h:panelGrid>
-                            
+
                             <h:outputLabel for="topics" value="#{bundle.topics}" styleClass="fieldLabel"/>
-                            <h:inputText id="topics" label="#{bundle.topics}" value="#{sessionMBean.session.name}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
-                            <h:message for="name" errorClass="errorMessage"/>
-                            
+                            <h:inputText id="topics" label="#{bundle.topics}" value="#{sessionMBean.session.topics}" size="60" maxlength="255" class="ui-inputfield ui-state-default ui-corner-all"/>
+                            <h:message for="topics" errorClass="errorMessage"/>
+
                             <h:panelGrid columns="4">
                                 <h:outputLabel for="startDate" value="#{bundle.start}" styleClass="fieldLabel"/>
                                 <h:outputText/>
@@ -88,29 +90,29 @@
                                 <h:message for="endDate" errorClass="errorMessage"/>
                                 <h:message for="endTime" errorClass="errorMessage"/>
                             </h:panelGrid>
-                            
+
                             <h:panelGrid columns="2">
                                 <h:outputLabel for="venue" value="#{bundle.venue}" styleClass="fieldLabel"/>
                                 <h:outputLabel for="room" value="#{bundle.room}" styleClass="fieldLabel"/>
-                                
-                                <h:selectOneMenu id="venue" label="#{bundle.venue}" value="#{sessionMBean.selectedVenue}">
+
+                                <h:selectOneMenu id="venue" label="#{bundle.venue}" value="#{venueSelectionMBean.selectedVenue}">
                                     <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                    <f:selectItems value="#{sessionMBean.venues}" var="venue" itemLabel="#{venue.name}" itemValue="#{venue.id}"/>
+                                    <f:selectItems value="#{venueSelectionMBean.venues}" var="venue" itemLabel="#{venue.name}" itemValue="#{venue.id}"/>
                                     <f:ajax render="room"/>
                                 </h:selectOneMenu>
-                                <h:selectOneMenu id="room" label="#{bundle.room}" value="#{sessionMBean.selectedRoom}">
+                                <h:selectOneMenu id="room" label="#{bundle.room}" value="#{venueSelectionMBean.selectedRoom}">
                                     <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                    <f:selectItems value="#{sessionMBean.rooms}" var="room" itemLabel="#{room.name}" itemValue="#{room.id}"/>
+                                    <f:selectItems value="#{venueSelectionMBean.rooms}" var="room" itemLabel="#{room.name}" itemValue="#{room.id}"/>
                                 </h:selectOneMenu>
-                                
+
                                 <h:message for="venue" errorClass="errorMessage"/>
                                 <h:message for="room" errorClass="errorMessage"/>
                             </h:panelGrid>
-                            
+
                             <h:outputLabel for="description" value="#{bundle.description}" styleClass="fieldLabel"/>
                             <h:inputTextarea id="description" value="#{sessionMBean.session.description}" label="#{bundle.description}" rows="4" cols="60" class="ui-inputfield ui-state-default ui-corner-all"/>
                             <h:message for="description" errorClass="errorMessage"/>
-                            
+
                             <h:outputLabel for="detailedDescription" value="#{bundle.detailedDescription}" styleClass="fieldLabel"/>
                             <h:inputTextarea id="detailedDescription" value="#{sessionMBean.session.detailedDescription}" label="#{bundle.detailedDescription}" rows="6" cols="60" class="ui-inputfield ui-state-default ui-corner-all"/>
                             <h:message for="detailedDescription" errorClass="errorMessage"/>
@@ -120,15 +122,16 @@
                         <p/>
                         <h:panelGrid columns="3">
                             <h:commandButton value="#{bundle.save}" action="#{sessionMBean.save}">
-                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                                <f:param name="eventId" value="#{param.eventId}"/>
                                 <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
                             <h:commandButton value="#{bundle.remove}" action="#{sessionMBean.remove}" rendered="#{! empty sessionMBean.id}">
-                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                                <f:param name="eventId" value="#{param.eventId}"/>
                                 <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
-                            <h:button value="#{bundle.cancel}" outcome="sessions">
-                                <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                            <h:button value="#{bundle.cancel}" outcome="event">
+                                <f:param name="id" value="#{param.eventId}"/>
+                                <f:param name="tab" value="2"/>
                             </h:button>
                         </h:panelGrid>
                     </h:form>

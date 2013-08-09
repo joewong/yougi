@@ -44,7 +44,19 @@
                                 </h:link>
                             </h:panelGroup>
 
-                            <h:outputText value="#{sessionMBean.session}" style="font-size: 26px; font-weight: bold; color: steelblue;"/>
+                            <h:panelGrid columns="2" width="100%" columnClasses="alignColumnLeft, alignColumnRight">
+                                <h:outputText value="#{sessionMBean.session}" style="font-size: 26px; font-weight: bold;"/>
+                                <h:panelGroup>
+                                    <p:button value="#{bundle.edit}" outcome="session_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                        <f:param name="id" value="#{sessionMBean.session.id}"/>
+                                        <f:param name="eventId" value="#{sessionMBean.session.event.id}"/>
+                                    </p:button>
+                                    <p:button value="#{bundle.back}" outcome="event">
+                                        <f:param name="id" value="#{sessionMBean.event.id}"/>
+                                        <f:param name="tab" value="2"/>
+                                    </p:button>
+                                </h:panelGroup>
+                            </h:panelGrid>
 
                             <h:outputText value="#{sessionMBean.session.speakers}" style="font-size: 16px; font-style: italic;" escape="false">
                                 <f:converter converterId="SessionSpeakerConverter"/>
@@ -73,9 +85,7 @@
 
                             <h:outputText value="#{sessionMBean.session.description}" escape="false" style="font-size: 14px; font-style: italic;"/>
 
-                            <p:spacer height="10"/>
-
-                            <h:outputText value="#{sessionMBean.session.detailedDescription}" escape="false"/>
+                            <p:spacer height="5"/>
 
                             <h:panelGroup>
                                 <h:outputText value="#{bundle.topics}: "/>
@@ -83,6 +93,10 @@
                                     <f:converter converterId="TopicsConverter"/>
                                 </h:outputText>
                             </h:panelGroup>
+
+                            <p:spacer height="5"/>
+
+                            <h:outputText value="#{sessionMBean.session.detailedDescription}" escape="false"/>
 
                             <h:panelGrid width="100%" columns="3" columnClasses="panelGridColumn,panelGridColumn,panelGridColumn">
                                 <p:panel header="#{bundle.relatedSessions}">

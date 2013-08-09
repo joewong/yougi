@@ -48,10 +48,10 @@ import org.cejug.yougi.util.ResourceBundleHelper;
 public class UserAccountMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @EJB
     private UserAccountBean userAccountBean;
-    
+
     @ManagedProperty(value="#{locationMBean}")
     private LocationMBean locationMBean;
 
@@ -62,7 +62,7 @@ public class UserAccountMBean implements Serializable {
     private String passwordConfirmation;
 
     private String validationEmail;
-    
+
     private Boolean validationPrivacy = false;
 
     public UserAccountMBean() {
@@ -83,7 +83,7 @@ public class UserAccountMBean implements Serializable {
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
     }
-    
+
     /**
      * @return the password
      */
@@ -118,7 +118,7 @@ public class UserAccountMBean implements Serializable {
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,ResourceBundleHelper.INSTANCE.getMessage("errorCode0004"), null));
         }
     }
-    
+
     public void validateEmailConfirmation(FacesContext context, UIComponent component, Object value) {
         String validationEmailConfirmation = (String) value;
         if(!validationEmailConfirmation.equals(this.validationEmail)) {
@@ -154,7 +154,7 @@ public class UserAccountMBean implements Serializable {
         }
     }
     // End of privacy composite validation
-    
+
     public LocationMBean getLocationMBean() {
         return locationMBean;
     }

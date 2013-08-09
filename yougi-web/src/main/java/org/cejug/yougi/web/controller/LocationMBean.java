@@ -66,10 +66,6 @@ public class LocationMBean {
 
     private boolean initialized;
 
-    public LocationMBean() {
-        LOGGER.info("A new locationBean created.");
-    }
-
     public List<Country> getCountries() {
         this.countries = locationBean.findCountries();
         return this.countries;
