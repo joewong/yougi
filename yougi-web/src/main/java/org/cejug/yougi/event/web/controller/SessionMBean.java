@@ -69,7 +69,6 @@ public class SessionMBean implements Serializable {
     @ManagedProperty(value = "#{venueSelectionMBean}")
     private VenueSelectionMBean venueSelectionMBean;
 
-    private Event event;
     private Session session;
 
     private List<Event> events;
@@ -105,14 +104,6 @@ public class SessionMBean implements Serializable {
         this.venueSelectionMBean = venueSelectionMBean;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
     public Session getSession() {
         return session;
     }
@@ -123,7 +114,8 @@ public class SessionMBean implements Serializable {
 
     public List<Session> getSessions() {
         if (this.sessions == null) {
-            this.sessions = sessionBean.findSessionsWithSpeakers(this.event);
+            Event event = new Event(selectedEvent);
+            this.sessions = sessionBean.findSessionsWithSpeakers(event);
         }
         return this.sessions;
     }
@@ -151,7 +143,8 @@ public class SessionMBean implements Serializable {
 
     public List<Track> getTracks() {
         if(this.tracks == null) {
-            this.tracks = trackBean.findTracks(this.event);
+            Event event = new Event(selectedEvent);
+            this.tracks = trackBean.findTracks(event);
         }
         return this.tracks;
     }
@@ -162,7 +155,6 @@ public class SessionMBean implements Serializable {
 
     public void setSelectedEvent(String selectedEvent) {
         this.selectedEvent = selectedEvent;
-        this.venueSelectionMBean.setSelectedEvent(selectedEvent);
     }
 
     public String getSelectedTrack() {
@@ -191,20 +183,26 @@ public class SessionMBean implements Serializable {
     @PostConstruct
     public void load() {
         if (this.eventId != null && !this.eventId.isEmpty()) {
-            this.event = eventBean.findEvent(eventId);
-            this.selectedEvent = this.event.getId();
+            Event event = eventBean.findEvent(eventId);
+            this.session = new Session();
+            this.session.setEvent(event);
+            this.selectedEvent = event.getId();
             this.venueSelectionMBean.setSelectedEvent(this.selectedEvent);
         }
 
         if (this.id != null && !this.id.isEmpty()) {
             this.session = sessionBean.findSession(id);
-            this.event = this.session.getEvent();
-            this.selectedEvent = this.event.getId();
-            this.selectedTrack = this.session.getTrack().getId();
+            Event event = this.session.getEvent();
+            this.selectedEvent = event.getId();
+            if(this.session.getTrack() != null) {
+                this.selectedTrack = this.session.getTrack().getId();
+            }
             this.venueSelectionMBean.setSelectedEvent(this.selectedEvent);
             this.venueSelectionMBean.setSelectedVenue(this.session.getRoom().getVenue().getId());
             this.venueSelectionMBean.setSelectedRoom(this.session.getRoom().getId());
-        } else {
+        }
+
+        if(this.session == null) {
             this.session = new Session();
         }
     }

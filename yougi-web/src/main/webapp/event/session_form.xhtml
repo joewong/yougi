@@ -34,13 +34,9 @@
                     <h:form id="sessionForm">
                         <h:messages globalOnly="true" styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/>
                         <h:panelGrid>
-                            <h:outputLabel for="event" value="#{bundle.event}" styleClass="requiredFieldLabel"/>
-                            <h:selectOneMenu id="event" label="#{bundle.event}" value="#{sessionMBean.selectedEvent}" required="true">
-                                <f:selectItem itemLabel="#{bundle.select}" itemValue="" />
-                                <f:selectItems value="#{sessionMBean.events}" var="event" itemLabel="#{event.name}" itemValue="#{event.id}"/>
-                                <f:ajax render="venue"/>
-                            </h:selectOneMenu>
-                            <h:message for="event" errorClass="errorMessage"/>
+                            <h:outputText value="#{bundle.event}" styleClass="requiredFieldLabel"/>
+                            <h:outputText value="#{sessionMBean.session.event}"/>
+                            <h:inputHidden id="event" value="#{sessionMBean.selectedEvent}"/>
 
                             <h:outputLabel for="name" value="#{bundle.name}" styleClass="requiredFieldLabel"/>
                             <h:inputText id="name" label="#{bundle.name}" value="#{sessionMBean.session.name}" size="60" maxlength="255" required="true" class="ui-inputfield ui-state-default ui-corner-all"/>
@@ -125,7 +121,7 @@
                                 <f:param name="eventId" value="#{param.eventId}"/>
                                 <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
-                            <h:commandButton value="#{bundle.remove}" action="#{sessionMBean.remove}" rendered="#{! empty sessionMBean.id}">
+                            <h:commandButton value="#{bundle.remove}" action="#{sessionMBean.remove}" rendered="#{! empty sessionMBean.id}" onclick="return confirmAction('#{bundle.warnCode0005}');">
                                 <f:param name="eventId" value="#{param.eventId}"/>
                                 <f:param name="id" value="#{sessionMBean.session.id}"/>
                             </h:commandButton>
