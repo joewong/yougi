@@ -290,6 +290,7 @@ public class UserAccountBean {
             userAccount.defineNewConfirmationCode();
         }
 
+        userAccount.setEmailIsEncrypted(true);
         userAccount.setRegistrationDate(Calendar.getInstance().getTime());
 
         if(!existingAccount) {
@@ -366,7 +367,6 @@ public class UserAccountBean {
                 ApplicationProperty appProp = applicationPropertyBean.findApplicationProperty(Properties.SEND_EMAILS);
                 if(appProp.sendEmailsEnabled()) {
                     sendWelcomeMessage(userAccount);
-
                     AccessGroup administrativeGroup = accessGroupBean.findAdministrativeGroup();
                     List<UserAccount> admins = userGroupBean.findUsersGroup(administrativeGroup);
                     sendNewMemberAlertMessage(userAccount, admins);

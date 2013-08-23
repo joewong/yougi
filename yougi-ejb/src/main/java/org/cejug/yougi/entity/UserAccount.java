@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.*;
-import org.cejug.yougi.util.TextUtils;
+import org.cejug.yougi.util.*;
 
 /**
  * Represents the user account.
@@ -60,6 +60,9 @@ public class UserAccount implements Serializable, Identified {
     @Column(name="confirmation_code")
     private String confirmationCode;
 
+    @Column(name="email_is_encrypted")
+    private Boolean emailIsEncrypted;
+    
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name="registration_date")
     private Date registrationDate;
@@ -131,7 +134,11 @@ public class UserAccount implements Serializable, Identified {
     public UserAccount(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        try{
+        	this.email = AESencrp.encrypt(email);
+        }catch(Exception e){
+        	this.email = email;
+        }
     }
 
     @Override
@@ -144,6 +151,18 @@ public class UserAccount implements Serializable, Identified {
         this.id = id;
     }
 
+    public void setEmailIsEncrypted(Boolean encrypted) {
+        this.emailIsEncrypted = encrypted;
+    }
+    
+    public void setEmail(String email){
+    	this.email = email;
+    }
+    
+    public Boolean getEmailIsEncrypted(){
+    	return this.emailIsEncrypted;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
@@ -182,7 +201,11 @@ public class UserAccount implements Serializable, Identified {
      * @see #getPostingEmail()
      */
     public String getEmail() {
-        return email;
+    	String email_str = email;
+    	try{
+    		 email_str = AESencrp.decrypt(email);
+    	}catch(Exception e){}
+    	return email_str;
     }
 
     /**
@@ -195,7 +218,9 @@ public class UserAccount implements Serializable, Identified {
 
     public void setUnverifiedEmail(String unverifiedEmail) {
         if(unverifiedEmail != null) {
-            this.unverifiedEmail = unverifiedEmail.toLowerCase();
+        	try{
+        	this.unverifiedEmail = AESencrp.encrypt(unverifiedEmail.toLowerCase());
+        	}catch(Exception e){}
         }
         else {
             this.unverifiedEmail = null;
@@ -212,16 +237,20 @@ public class UserAccount implements Serializable, Identified {
      * the available email address for posting email messages.
      */
     public String getPostingEmail() {
-        // In case there is an unverified email, it has the priority to be in
-        // the message recipient.
-        if(this.unverifiedEmail != null && !this.unverifiedEmail.isEmpty()) {
-            return this.unverifiedEmail;
-        }
-        // If unverified email is null it means that the email is valid and it
-        // can be used in the message recipient.
-        else {
-            return this.email;
-        }
+    	String email_local = "";
+    	try{
+	        // In case there is an unverified email, it has the priority to be in
+	        // the message recipient.
+	        if(this.unverifiedEmail != null && !this.unverifiedEmail.isEmpty()) {
+	        		return AESencrp.decrypt(this.unverifiedEmail);
+	        }
+	        // If unverified email is null it means that the email is valid and it
+	        // can be used in the message recipient.
+	        else {
+	            return AESencrp.decrypt(this.email);
+	        }
+    	}catch(Exception e){}
+    	return email_local;
     }
 
     public Date getRegistrationDate() {

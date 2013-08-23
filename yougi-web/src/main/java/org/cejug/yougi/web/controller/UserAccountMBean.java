@@ -288,7 +288,7 @@ public class UserAccountMBean implements Serializable {
     }
 
     public String deactivateMembership() {
-        userAccountBean.deactivateMembership(userAccount, DeactivationType.OWNWILL);
+    	userAccountBean.deactivateMembership(userAccount, DeactivationType.OWNWILL);
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         try {

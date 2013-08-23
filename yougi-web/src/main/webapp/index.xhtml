@@ -94,20 +94,19 @@
 
                         <h:panelGrid>
                             <p:panel header="Login" style="width: 300px" rendered="#{empty request.remoteUser}">
-                                <form method="post" action="j_security_check">
+                                <h:form>
                                     <h:panelGrid>
                                         <h:outputLabel for="j_username" value="#{bundle.email}" styleClass="fieldLabel"/>
-                                        <input type="text" name="j_username" onchange="formatEmail(this);"/>
-
+                                        <input type="text" name="j_username"/>
                                         <h:outputLabel for="j_password" value="#{bundle.password}" styleClass="fieldLabel"/>
                                         <input type="password" name="j_password"/>
                                     </h:panelGrid>
 
                                     <h:panelGrid columns="2">
-                                        <input type="submit" name="submit" value="#{bundle.signIn}"/>
+                                        <h:commandButton type="submit" name="submit" action="#{loginMBean.login}" value="#{bundle.signIn}"/>
                                         <h:button outcome="index" value="#{bundle.cancel}"/>
                                     </h:panelGrid>
-                                </form>
+                                </h:form>
                             </p:panel>
                         </h:panelGrid>
                     </h:panelGrid>

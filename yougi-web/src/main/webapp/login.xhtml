@@ -32,24 +32,24 @@
                     <p><h:messages styleClass="alertMessage" infoClass="infoMessage" errorClass="errorMessage"/></p>
                     <p>-<h:outputText value="#{currentViewId}" styleClass="alertMessage"/></p>
                     <p>#{bundle.signInMessage}.</p>
-                    <form method="post" action="j_security_check">
+                    <h:form>
                         <h:panelGrid>
                             <h:outputLabel for="j_username" value="#{bundle.email}" styleClass="fieldLabel"/>
-                            <input type="text"  name="j_username" onchange="formatEmail(this)"/>
+                            <input type="text"  name="j_username"/>
 
                             <h:outputLabel for="j_password" value="#{bundle.password}" styleClass="fieldLabel"/>
                             <input type="password" name="j_password"/>
                         </h:panelGrid>
 
                         <h:panelGrid columns="2">
-                            <input type="submit" name="submit" value="#{bundle.signIn}"/>
+                        	<h:commandButton value="#{bundle.signIn}" action="#{loginMBean.login}"/>
                             <h:button outcome="index" value="#{bundle.cancel}"/>
                         </h:panelGrid>
                         <p></p>
                         <h:link outcome="request_password_change" value="#{bundle.forgotPassword}"/>
                         <h:outputText value=" | "/>
                         <h:link outcome="registration" value="#{bundle.register}"/>
-                    </form>
+                    </h:form>
                 </div>
             </ui:define>
         </ui:composition>

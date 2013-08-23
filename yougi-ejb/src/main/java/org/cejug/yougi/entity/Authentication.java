@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.persistence.*;
-import org.cejug.yougi.util.Base64Encoder;
+import org.cejug.yougi.util.*;
 
 /**
  * Represents the authentication credentials of the user.
@@ -38,12 +38,13 @@ public class Authentication implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+    @Column
     private String username;
 
     @Column(nullable=false)
     private String password;
 
+    @Id
     @ManyToOne
     @JoinColumn(name="user_account")
     private UserAccount userAccount;
@@ -53,7 +54,9 @@ public class Authentication implements Serializable {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+    	try{
+    		this.username = username;
+    	}catch(Exception e){}
     }
 
     /**

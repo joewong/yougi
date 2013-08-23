@@ -345,3 +345,8 @@ update city set timezone = 'Pacific/Kiritimati'  where timezone = 'UTC +14:00';
 
 --changeset htmfilho:11
 ALTER TABLE  `user_account` CHANGE  `gender`  `gender` TINYINT( 1 ) NULL
+
+--changeset joewong:12
+ALTER TABLE  `user_account` ADD  `email_is_encrypted` BOOLEAN NULL DEFAULT NULL;
+ALTER TABLE authentication DROP PRIMARY KEY;
+ALTER TABLE `authentication` ADD PRIMARY KEY (  `user_account` )
