@@ -49,6 +49,12 @@ public class Track implements Serializable, Identified {
     @JoinColumn(name = "event")
     private Event event;
 
+    public Track() {}
+
+    public Track(String id) {
+        this.id = id;
+    }
+
     @Override
     public String getId() {
         return id;

@@ -112,9 +112,9 @@
                             </p:tab>
 
                             <p:tab title="#{bundle.tracks}">
-                                <h:button value="#{bundle.newTrack}" outcome="track_form" rendered="#{securityBackingMBean.isUserLeader}">
+                                <p:button value="#{bundle.newTrack}" outcome="track_form" rendered="#{securityBackingMBean.isUserLeader}">
                                     <f:param name="eventId" value="#{eventMBean.event.id}"/>
-                                </h:button>
+                                </p:button>
                                 <p/>
 
                                 <h:panelGrid width="100%">
@@ -156,7 +156,7 @@
                                     <f:param name="eventId" value="#{eventMBean.event.id}"/>
                                 </p:button>
                                 <p/>
-                                
+
                                 <h:panelGrid width="100%">
                                     <c:forEach var="ses" items="#{eventMBean.sessions}">
                                         <h:panelGroup>
@@ -326,7 +326,9 @@
                                                     <f:param name="id" value="#{sponsor.id}"/>
                                                     <f:param name="eventId" value="#{eventMBean.event.id}"/>
                                                 </h:link>
-                                                <h:outputText value="#{sponsor.sponsorshipLevel}"/>
+                                                <h:outputText value="#{sponsor.sponsorshipLevel}">
+                                                    <f:converter converterId="SponsorshipLevelConverter"/>
+                                                </h:outputText>
                                             </h:panelGrid>
                                         </p:panel>
                                     </p:dataGrid>

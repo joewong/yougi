@@ -65,6 +65,10 @@ public class TopicBean {
      * exist. Topics are created with default values if they don't exist yet.
      */
     public void consolidateTopics(String topics) {
+        if(topics == null || topics.isEmpty()) {
+            return;
+        }
+
         StringTokenizer st = new StringTokenizer(topics, ",");
         String topicName;
         Topic topic;

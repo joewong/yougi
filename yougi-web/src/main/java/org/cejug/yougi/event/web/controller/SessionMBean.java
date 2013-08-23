@@ -33,10 +33,8 @@ import org.cejug.yougi.event.business.RoomBean;
 import org.cejug.yougi.event.business.SessionBean;
 import org.cejug.yougi.event.business.TrackBean;
 import org.cejug.yougi.event.entity.Event;
-import org.cejug.yougi.event.entity.Room;
 import org.cejug.yougi.event.entity.Session;
 import org.cejug.yougi.event.entity.Track;
-import org.cejug.yougi.event.entity.Venue;
 
 /**
  * @author Hildeberto Mendonca - http://www.hildeberto.com
@@ -52,13 +50,13 @@ public class SessionMBean implements Serializable {
 
     @EJB
     private EventBean eventBean;
-    
+
     @EJB
     private EventVenueBean eventVenueBean;
-    
+
     @EJB
     private RoomBean roomBean;
-    
+
     @EJB
     private TrackBean trackBean;
 
@@ -68,7 +66,9 @@ public class SessionMBean implements Serializable {
     @ManagedProperty(value = "#{param.eventId}")
     private String eventId;
 
-    private Event event;
+    @ManagedProperty(value = "#{venueSelectionMBean}")
+    private VenueSelectionMBean venueSelectionMBean;
+
     private Session session;
 
     private List<Event> events;
@@ -76,13 +76,9 @@ public class SessionMBean implements Serializable {
     private List<Session> relatedSessions;
     private List<Session> sessionsInTheSameRoom;
     private List<Session> sessionsInParallel;
-    private List<Venue> venues;
-    private List<Room> rooms;
     private List<Track> tracks;
 
     private String selectedEvent;
-    private String selectedVenue;
-    private String selectedRoom;
     private String selectedTrack;
 
     public SessionMBean() {
@@ -104,12 +100,8 @@ public class SessionMBean implements Serializable {
         this.eventId = eventId;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setVenueSelectionMBean(VenueSelectionMBean venueSelectionMBean) {
+        this.venueSelectionMBean = venueSelectionMBean;
     }
 
     public Session getSession() {
@@ -122,7 +114,8 @@ public class SessionMBean implements Serializable {
 
     public List<Session> getSessions() {
         if (this.sessions == null) {
-            this.sessions = sessionBean.findSessionsWithSpeakers(this.event);
+            Event event = new Event(selectedEvent);
+            this.sessions = sessionBean.findSessionsWithSpeakers(event);
         }
         return this.sessions;
     }
@@ -147,25 +140,11 @@ public class SessionMBean implements Serializable {
         }
         return sessionsInParallel;
     }
-    
-    public List<Venue> getVenues() {
-        if(this.venues == null) {
-            this.venues = eventVenueBean.findEventVenues(this.event);
-        }
-        return this.venues;
-    }
-    
-    public List<Room> getRooms() {
-        if(this.rooms == null) {
-            Venue venue = new Venue(selectedVenue);
-            this.rooms = roomBean.findRooms(venue);
-        }
-        return this.rooms;
-    }
-    
+
     public List<Track> getTracks() {
         if(this.tracks == null) {
-            this.tracks = trackBean.findTracks(this.event);
+            Event event = new Event(selectedEvent);
+            this.tracks = trackBean.findTracks(event);
         }
         return this.tracks;
     }
@@ -177,23 +156,7 @@ public class SessionMBean implements Serializable {
     public void setSelectedEvent(String selectedEvent) {
         this.selectedEvent = selectedEvent;
     }
-    
-    public String getSelectedVenue() {
-        return this.selectedVenue;
-    }
 
-    public void setSelectedVenue(String selectedVenue) {
-        this.selectedVenue = selectedVenue;
-    }
-    
-    public String getSelectedRoom() {
-        return this.selectedRoom;
-    }
-
-    public void setSelectedRoom(String selectedRoom) {
-        this.selectedRoom = selectedRoom;
-    }
-    
     public String getSelectedTrack() {
         return this.selectedTrack;
     }
@@ -220,14 +183,26 @@ public class SessionMBean implements Serializable {
     @PostConstruct
     public void load() {
         if (this.eventId != null && !this.eventId.isEmpty()) {
-            this.event = eventBean.findEvent(eventId);
-            this.selectedEvent = this.event.getId();
+            Event event = eventBean.findEvent(eventId);
+            this.session = new Session();
+            this.session.setEvent(event);
+            this.selectedEvent = event.getId();
+            this.venueSelectionMBean.setSelectedEvent(this.selectedEvent);
         }
 
         if (this.id != null && !this.id.isEmpty()) {
             this.session = sessionBean.findSession(id);
-            this.selectedEvent = this.session.getEvent().getId();
-        } else {
+            Event event = this.session.getEvent();
+            this.selectedEvent = event.getId();
+            if(this.session.getTrack() != null) {
+                this.selectedTrack = this.session.getTrack().getId();
+            }
+            this.venueSelectionMBean.setSelectedEvent(this.selectedEvent);
+            this.venueSelectionMBean.setSelectedVenue(this.session.getRoom().getVenue().getId());
+            this.venueSelectionMBean.setSelectedRoom(this.session.getRoom().getId());
+        }
+
+        if(this.session == null) {
             this.session = new Session();
         }
     }
@@ -236,12 +211,19 @@ public class SessionMBean implements Serializable {
         Event evt = eventBean.findEvent(selectedEvent);
         this.session.setEvent(evt);
 
+        this.session.setRoom(this.venueSelectionMBean.getRoom());
+
+        if(this.selectedTrack != null && !this.selectedTrack.isEmpty()) {
+            Track track = new Track(this.selectedTrack);
+            this.session.setTrack(track);
+        }
+
         sessionBean.save(this.session);
-        return "sessions?faces-redirect=true&eventId=" + evt.getId();
+        return "event?faces-redirect=true&tab=2&id=" + this.eventId;
     }
 
     public String remove() {
         sessionBean.remove(this.session.getId());
-        return "sessions?faces-redirect=true&eventId=" + this.event.getId();
+        return "event?faces-redirect=true&tab=2&id=" + this.eventId;
     }
 }
